@@ -1,3 +1,7 @@
+![codexboru_profil](githubprofil.png)
+
+
+
 ## 🌂 CodexArkham — BotschaftsNFT
 
 Ein Fragment aus der Tiefe.  
