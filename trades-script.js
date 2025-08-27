@@ -102,4 +102,32 @@ function renderTrades() {
   const trades = JSON.parse(localStorage.getItem("trades")) || [];
 
   trades.forEach((trade, index) => {
-    const row = document.create
+    const row = document.createElement("tr");
+    row.className = trade.position === "Long" ? "long" : "short";
+
+    row.innerHTML = `
+      <td>${trade.position}</td>
+      <td>${trade.entry}</td>
+      <td>${trade.leverage}</td>
+      <td>${trade.liq}</td>
+      <td>${trade.pnl}</td>
+      <td>${trade.balance}</td>
+      <td>${trade.collateral}</td>
+      <td>${trade.wallet}</td>
+      <td class="action-buttons">
+        <button onclick="deleteTrade(${index})">🗑️ Löschen</button>
+      </td>
+    `;
+
+    body.appendChild(row);
+  });
+}
+
+function deleteTrade(index) {
+  let trades = JSON.parse(localStorage.getItem("trades")) || [];
+  trades.splice(index, 1);
+  localStorage.setItem("trades", JSON.stringify(trades));
+  renderTrades();
+}
+
+window.onload = renderTrades;
