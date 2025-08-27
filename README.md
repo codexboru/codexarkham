@@ -26,7 +26,7 @@ Hier wird technische Analyse zur rituellen Handlung, jede Datei zur Erinnerung, 
 
 > _„Wo alles beginnt, beginnt nichts. Und doch: Die Schwelle ist sichtbar.“_
 
-[🜁 Öffne index.html](./index.html)  
+[🜁 Öffne codexboru](https://github.com/codexboru)  
 Die rituelle Startseite. Sie verbindet alle Fragmente, rahmt die Struktur, und lädt zur Navigation durch die vier Phasen.
 
 ---
@@ -35,7 +35,7 @@ Die rituelle Startseite. Sie verbindet alle Fragmente, rahmt die Struktur, und l
 
 > _„Jede Adresse ist ein Gedicht. Jeder Token ein Flammenrest.“_
 
-[🧿 Öffne wallet.html](./wallet.html)  
+[🧿 Öffne walletscan.html](https://codexboru.github.io/codexarkham/walletscan.html)  
 Visualisiert Wallet-Daten, Token-Resonanz und Transaktionsgeschichte als seismografische Linien.  
 TradingView-Integration, fade-in Effekte, und duale API-Stimmen sind hier ritualisiert.
 
@@ -45,7 +45,7 @@ TradingView-Integration, fade-in Effekte, und duale API-Stimmen sind hier ritual
 
 > _„Ein Trade ist kein Gewinn. Er ist ein Zeichen.“_
 
-[🜂 Öffne trades.html](./trades.html)  
+[🜂 Öffne trades.html](https://codexboru.github.io/codexarkham/)  
 Manuelle Eingabe der Top-20 Positionen.  
 Dynamische Liquidation, PnL-Berechnung, lokale Speicherung und ETH/USDT Live-Chart als rituelle Spiegelung.
 
