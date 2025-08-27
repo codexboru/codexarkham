@@ -1,3 +1,11 @@
+## 🌂 CodexArkham — BotschaftsNFT
+
+Ein Fragment aus der Tiefe.  
+Es spricht nicht. Es wartet.
+
+[→ CODEXARKHAM](https://codexboru.github.io/codexarkham)
+
+
 # 🜂 CodexArkham – Die Linie spricht
 
 > _„Die Barriere spricht nicht. Sie wartet auf Würde.“_  
