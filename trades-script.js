@@ -46,7 +46,7 @@ function calculateLiq() {
     return;
   }
 
-  let liq = position === "Long"
+  const liq = position === "Long"
     ? entry * (1 - 1 / leverage)
     : entry * (1 + 1 / leverage);
 
@@ -64,11 +64,11 @@ function calculatePnL() {
     return;
   }
 
-  let diff = position === "Long"
+  const diff = position === "Long"
     ? currentMarketPrice - entry
     : entry - currentMarketPrice;
 
-  let pnl = diff * leverage * (collateral / entry);
+  const pnl = diff * leverage * (collateral / entry);
   document.getElementById("pnl").value = pnl.toFixed(2) + " USDT";
 }
 
@@ -87,7 +87,7 @@ async function saveTrade() {
     wallet: document.getElementById("wallet").value
   };
 
-  let trades = JSON.parse(localStorage.getItem("trades")) || [];
+  const trades = JSON.parse(localStorage.getItem("trades")) || [];
   trades.push(trade);
   localStorage.setItem("trades", JSON.stringify(trades));
 
@@ -124,7 +124,7 @@ function renderTrades() {
 }
 
 function deleteTrade(index) {
-  let trades = JSON.parse(localStorage.getItem("trades")) || [];
+  const trades = JSON.parse(localStorage.getItem("trades")) || [];
   trades.splice(index, 1);
   localStorage.setItem("trades", JSON.stringify(trades));
   renderTrades();
