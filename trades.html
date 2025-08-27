@@ -1,64 +1,119 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Trades – Resonanzfragmente</title>
-  <link rel="stylesheet" href="flammen.css">
+  <title>Trades Codex</title>
+  <style>
+    body {
+      background-color: #0f0f0f;
+      color: #f8f8f8;
+      font-family: monospace;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 40px;
+    }
+    th, td {
+      border: 1px solid #444;
+      padding: 12px;
+      text-align: center;
+    }
+    th {
+      background-color: #222;
+    }
+    tr#eth-hyperliquid-flamme {
+      background-color: #1a001a;
+      color: #ff4d4d;
+      font-weight: bold;
+    }
+    a {
+      color: #ffcc00;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    select, input {
+      background-color: #222;
+      color: #f8f8f8;
+      border: none;
+      padding: 6px;
+      font-family: monospace;
+    }
+    button {
+      background-color: #ff4d4d;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #ff1a1a;
+    }
+  </style>
 </head>
 <body>
-  <h1>🜂 Trades – Lebendige Fragmente</h1>
-
-  <table id="trades-table">
+  <h1>🜂 Trades Codex: ETH Resonanz</h1>
+  <table id="tradesTable">
     <thead>
       <tr>
         <th>Position</th>
-        <th>Einstiegspreis</th>
-        <th>Liquidationspreis</th>
+        <th>Entry Price</th>
+        <th>Liquidation Price</th>
         <th>PnL</th>
+        <th>Wallet Balance</th>
+        <th>Collateral</th>
         <th>Wallet</th>
-        <th>Balance</th> <!-- 🜃 Neue Spalte -->
-        <th>Speichern</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
+      <tr id="eth-hyperliquid-flamme">
         <td>
-          <select>
+          <select id="positionType">
+            <option selected>Short</option>
             <option>Long</option>
-            <option>Short</option>
           </select>
         </td>
-        <td><input type="number" step="0.01" placeholder="z.B. 23456.78"></td>
-        <td><input type="number" step="0.01" placeholder="z.B. 21000.00"></td>
-        <td><input type="text" placeholder="z.B. +123.45 USDT"></td>
-        <td><input type="text" placeholder="z.B. 4567.89 USDT"></td>
-        <td><input type="text" placeholder="z.B. 7890.00 USDT"></td> <!-- Balance -->
-        <td><button onclick="saveTrade(this)">💾</button></td>
+        <td><input id="entryPrice" value="1,915.00"></td>
+        <td><input id="liqPrice" value="2,050.00"></td>
+        <td><input id="pnl" value="-4,200,000.00 USDT"></td>
+        <td><input id="walletBalance" value="66,400,000.00 USDT"></td>
+        <td><input id="collateral" value="3,320,000.00 USDT"></td>
+        <td><a id="walletLink" href="https://hypurrscan.io/address/0x54D7" target="_blank">🔗 0x54D7</a></td>
       </tr>
     </tbody>
   </table>
 
+  <div style="text-align:center; margin-top:20px;">
+    <button onclick="saveTrade()">💾 Speichern</button>
+  </div>
+
   <script>
-    function saveTrade(button) {
-      const row = button.closest("tr");
-      const position = row.querySelector("select").value;
-      const entry = row.cells[1].querySelector("input").value;
-      const liq = row.cells[2].querySelector("input").value;
-      const pnl = row.cells[3].querySelector("input").value;
-      const wallet = row.cells[4].querySelector("input").value;
-      const balance = row.cells[5].querySelector("input").value;
+    function saveTrade() {
+      const table = document.getElementById("tradesTable").getElementsByTagName("tbody")[0];
 
-      console.log("Gespeichert:", {
-        position,
-        entry,
-        liq,
-        pnl,
-        wallet,
-        balance
-      });
+      const position = document.getElementById("positionType").value;
+      const entry = document.getElementById("entryPrice").value;
+      const liq = document.getElementById("liqPrice").value;
+      const pnl = document.getElementById("pnl").value;
+      const balance = document.getElementById("walletBalance").value;
+      const collateral = document.getElementById("collateral").value;
+      const wallet = document.getElementById("walletLink").outerHTML;
 
-      row.style.backgroundColor = "#222"; // Ritualisiertes Feedback
+      const newRow = document.createElement("tr");
+      newRow.innerHTML = `
+        <td>${position}</td>
+        <td>${entry}</td>
+        <td>${liq}</td>
+        <td>${pnl}</td>
+        <td>${balance}</td>
+        <td>${collateral}</td>
+        <td>${wallet}</td>
+      `;
+
+      table.appendChild(newRow);
     }
   </script>
 </body>
-</html>
+      </html>
