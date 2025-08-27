@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CodexArkham — Wallet Resonanzkarte</title>
+  <style>
+    body {
+      background-color: #0d0d0d;
+      color: #e0e0e0;
+      font-family: monospace;
+      padding: 2rem;
+    }
+    input, button {
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin-right: 0.5rem;
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+      border: 1px solid #444;
+    }
+    .section {
+      margin-top: 2rem;
+      padding: 1rem;
+      background-color: #111;
+      border: 1px solid #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>🜂 CodexArkham</h1>
+
+  <div id="wallet-section" class="section">
+    ⧉ Wartet auf Resonanz...
+  </div>
+
+  <script type="module">
+    import { createWalletInput } from './walletInput.js';
+    import { createTradingViewChart } from './tv_chart.js';
+    import { fetchTokenResonanz } from './tokenresonanz.js';
+    import { fetchChronik } from './chronik.js';
+
+    const apiKey = 'XWEQM1FA1R4WRP8TRG7BAHF28QHTYN1GQ8';
+    const walletSection = document.getElementById('wallet-section');
+
+    const inputContainer = createWalletInput(async (wallet) => {
+      walletSection.innerHTML = ''; // Reset
+
+      const chart = createTradingViewChart();
+      const token = await fetchTokenResonanz(wallet, apiKey);
+      const chronik = await fetchChronik(wallet, apiKey);
+
+      walletSection.appendChild(chart);
+      walletSection.appendChild(token);
+      walletSection.appendChild(chronik);
+    });
+
+    document.body.insertBefore(inputContainer, walletSection);
+  </script>
+</body>
+</html>
