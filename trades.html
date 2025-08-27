@@ -40,10 +40,24 @@
     button:hover {
       background-color: #ff1a1a;
     }
+    .long {
+      background-color: #004d00;
+      color: #aaffaa;
+    }
+    .short {
+      background-color: #660000;
+      color: #ffaaaa;
+    }
     .action-buttons {
       display: flex;
       gap: 6px;
       justify-content: center;
+    }
+    iframe {
+      margin-top: 40px;
+      border: none;
+      width: 100%;
+      height: 500px;
     }
   </style>
 </head>
@@ -57,7 +71,7 @@
         <th>Entry Price</th>
         <th>Liquidation Price</th>
         <th>PnL</th>
-        <th>Wallet Balance</th>
+        <th>Wallet Size</th>
         <th>Collateral</th>
         <th>Wallet</th>
         <th>Aktion</th>
@@ -65,8 +79,13 @@
     </thead>
     <tbody id="tradesBody">
       <tr>
-        <td><select id="position"><option>Long</option><option>Short</option></select></td>
-        <td><input id="entry" placeholder="z.B. 1915.00"></td>
+        <td>
+          <select id="position" onchange="fetchLivePrice()">
+            <option>Long</option>
+            <option>Short</option>
+          </select>
+        </td>
+        <td><input id="entry" placeholder="Live-Preis wird geladen..."></td>
         <td><input id="liq" placeholder="z.B. 2050.00"></td>
         <td><input id="pnl" placeholder="z.B. -4200000.00 USDT"></td>
         <td><input id="balance" placeholder="z.B. 66400000.00 USDT"></td>
@@ -77,10 +96,23 @@
     </tbody>
   </table>
 
-  <script>
-    function saveTrade() {
-      const body = document.getElementById("tradesBody");
+  <!-- TradingView Live Chart -->
+  <iframe id="ethChart" src="https://www.tradingview.com/chart/?symbol=BINANCE:ETHUSDT" allowfullscreen></iframe>
 
+  <script>
+    async function fetchLivePrice() {
+      try {
+        const response = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT");
+        const data = await response.json();
+        const livePrice = parseFloat(data.price).toFixed(2);
+        document.getElementById("entry").value = livePrice;
+      } catch (error) {
+        console.error("Fehler beim Laden des Live-Preises:", error);
+        document.getElementById("entry").value = "Fehler";
+      }
+    }
+
+    function saveTrade() {
       const position = document.getElementById("position").value;
       const entry = document.getElementById("entry").value;
       const liq = document.getElementById("liq").value;
@@ -89,27 +121,79 @@
       const collateral = document.getElementById("collateral").value;
       const wallet = document.getElementById("wallet").value;
 
-      const newRow = document.createElement("tr");
-      newRow.innerHTML = `
-        <td>${position}</td>
-        <td>${entry}</td>
-        <td>${liq}</td>
-        <td>${pnl}</td>
-        <td>${balance}</td>
-        <td>${collateral}</td>
-        <td><a href="https://hypurrscan.io/address/${wallet}" target="_blank">${wallet}</a></td>
-        <td class="action-buttons">
-          <button onclick="deleteRow(this)">🗑️ Entfernen</button>
-        </td>
-      `;
+      const trade = {
+        position,
+        entry,
+        liq,
+        pnl,
+        balance,
+        collateral,
+        wallet
+      };
 
-      body.appendChild(newRow);
+      let trades = JSON.parse(localStorage.getItem("trades")) || [];
+      trades.push(trade);
+      localStorage.setItem("trades", JSON.stringify(trades));
+
+      renderTrades();
+      clearInputs();
     }
 
-    function deleteRow(button) {
-      const row = button.closest("tr");
-      row.remove();
+    function renderTrades() {
+      const body = document.getElementById("tradesBody");
+      body.innerHTML = document.querySelector("tr").outerHTML; // Keep input row
+
+      const trades = JSON.parse(localStorage.getItem("trades")) || [];
+
+      trades.forEach((trade, index) => {
+        const row = document.createElement("tr");
+        const positionClass = trade.position.toLowerCase() === "long" ? "long" : "short";
+
+        row.innerHTML = `
+          <td class="${positionClass}">${trade.position}</td>
+          <td>${trade.entry}</td>
+          <td>${trade.liq}</td>
+          <td>${trade.pnl}</td>
+          <td>${trade.balance}</td>
+          <td>${trade.collateral}</td>
+          <td><a href="https://hypurrscan.io/address/${trade.wallet}" target="_blank">${trade.wallet}</a></td>
+          <td class="action-buttons">
+            <button onclick="deleteTrade(${index})">🗑️ Entfernen</button>
+          </td>
+        `;
+        body.appendChild(row);
+      });
     }
+
+    function deleteTrade(index) {
+      let trades = JSON.parse(localStorage.getItem("trades")) || [];
+      trades.splice(index, 1);
+      localStorage.setItem("trades", JSON.stringify(trades));
+      renderTrades();
+    }
+
+    function clearInputs() {
+      document.getElementById("entry").value = "";
+      document.getElementById("liq").value = "";
+      document.getElementById("pnl").value = "";
+      document.getElementById("balance").value = "";
+      document.getElementById("collateral").value = "";
+      document.getElementById("wallet").value = "";
+    }
+
+    // Auto-Refresh des TradingView-Charts alle 60 Sekunden
+    setInterval(() => {
+      const iframe = document.getElementById("ethChart");
+      if (iframe) {
+        iframe.src = iframe.src;
+      }
+    }, 60000);
+
+    // Initiales Laden
+    window.onload = () => {
+      renderTrades();
+      fetchLivePrice();
+    };
   </script>
 </body>
-</html>
+  </html>
