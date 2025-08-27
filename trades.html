@@ -43,3 +43,73 @@
     .action-buttons {
       display: flex;
       gap: 6px;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>🜂 Trades Codex</h1>
+
+  <table id="tradesTable">
+    <thead>
+      <tr>
+        <th>Position</th>
+        <th>Entry Price</th>
+        <th>Liquidation Price</th>
+        <th>PnL</th>
+        <th>Wallet Balance</th>
+        <th>Collateral</th>
+        <th>Wallet</th>
+        <th>Aktion</th>
+      </tr>
+    </thead>
+    <tbody id="tradesBody">
+      <tr>
+        <td><select id="position"><option>Long</option><option>Short</option></select></td>
+        <td><input id="entry" placeholder="z.B. 1915.00"></td>
+        <td><input id="liq" placeholder="z.B. 2050.00"></td>
+        <td><input id="pnl" placeholder="z.B. -4200000.00 USDT"></td>
+        <td><input id="balance" placeholder="z.B. 66400000.00 USDT"></td>
+        <td><input id="collateral" placeholder="z.B. 3320000.00 USDT"></td>
+        <td><input id="wallet" placeholder="z.B. 0x54D7"></td>
+        <td><button onclick="saveTrade()">💾 Speichern</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    function saveTrade() {
+      const body = document.getElementById("tradesBody");
+
+      const position = document.getElementById("position").value;
+      const entry = document.getElementById("entry").value;
+      const liq = document.getElementById("liq").value;
+      const pnl = document.getElementById("pnl").value;
+      const balance = document.getElementById("balance").value;
+      const collateral = document.getElementById("collateral").value;
+      const wallet = document.getElementById("wallet").value;
+
+      const newRow = document.createElement("tr");
+      newRow.innerHTML = `
+        <td>${position}</td>
+        <td>${entry}</td>
+        <td>${liq}</td>
+        <td>${pnl}</td>
+        <td>${balance}</td>
+        <td>${collateral}</td>
+        <td><a href="https://hypurrscan.io/address/${wallet}" target="_blank">${wallet}</a></td>
+        <td class="action-buttons">
+          <button onclick="deleteRow(this)">🗑️ Entfernen</button>
+        </td>
+      `;
+
+      body.appendChild(newRow);
+    }
+
+    function deleteRow(button) {
+      const row = button.closest("tr");
+      row.remove();
+    }
+  </script>
+</body>
+</html>
