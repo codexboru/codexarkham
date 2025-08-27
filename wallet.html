@@ -25,10 +25,51 @@
       background-color: #111;
       border: 1px solid #333;
     }
+    #walletBalanceSection {
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #444;
+    }
   </style>
+
+  <script>
+    async function fetchEthBalance(walletAddress, apiKey) {
+      const url = `https://api.etherscan.io/api?module=account&action=balance&address=${walletAddress}&apikey=${apiKey}`;
+      const response = await fetch(url);
+      const result = await response.json();
+
+      if (result.status === "1") {
+        const ethBalance = parseFloat(result.result) / 1e18;
+        document.getElementById("ethBalance").textContent = `Ξ ${ethBalance.toFixed(6)}`;
+        fetchEthPrice(ethBalance);
+      } else {
+        document.getElementById("ethBalance").textContent = "Fehler beim Abrufen";
+        document.getElementById("usdBalance").textContent = "";
+      }
+    }
+
+    async function fetchEthPrice(ethBalance) {
+      const url = `https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd`;
+      const response = await fetch(url);
+      const result = await response.json();
+
+      if (result.ethereum && result.ethereum.usd) {
+        const usdValue = ethBalance * result.ethereum.usd;
+        document.getElementById("usdBalance").textContent = `$ ${usdValue.toFixed(2)}`;
+      } else {
+        document.getElementById("usdBalance").textContent = "USD-Wert nicht verfügbar";
+      }
+    }
+  </script>
 </head>
 <body>
   <h1>🜂 CodexArkham</h1>
+
+  <section id="walletBalanceSection">
+    <h2>Totale Wallet-Balance</h2>
+    <p id="ethBalance">Ξ ...</p>
+    <p id="usdBalance">$ ...</p>
+  </section>
 
   <div id="wallet-section" class="section">
     ⧉ Wartet auf Resonanz...
@@ -45,6 +86,8 @@
 
     const inputContainer = createWalletInput(async (wallet) => {
       walletSection.innerHTML = ''; // Reset
+
+      await fetchEthBalance(wallet, apiKey); // ETH + USD anzeigen
 
       const chart = createTradingViewChart();
       const token = await fetchTokenResonanz(wallet, apiKey);
