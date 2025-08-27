@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8">
   <title>Trades Codex</title>
@@ -22,24 +22,13 @@
     th {
       background-color: #222;
     }
-    tr#eth-hyperliquid-flamme {
-      background-color: #1a001a;
-      color: #ff4d4d;
-      font-weight: bold;
-    }
-    a {
-      color: #ffcc00;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
     select, input {
       background-color: #222;
       color: #f8f8f8;
       border: none;
       padding: 6px;
       font-family: monospace;
+      width: 100%;
     }
     button {
       background-color: #ff4d4d;
@@ -51,69 +40,6 @@
     button:hover {
       background-color: #ff1a1a;
     }
-  </style>
-</head>
-<body>
-  <h1>🜂 Trades Codex: ETH Resonanz</h1>
-  <table id="tradesTable">
-    <thead>
-      <tr>
-        <th>Position</th>
-        <th>Entry Price</th>
-        <th>Liquidation Price</th>
-        <th>PnL</th>
-        <th>Wallet Balance</th>
-        <th>Collateral</th>
-        <th>Wallet</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr id="eth-hyperliquid-flamme">
-        <td>
-          <select id="positionType">
-            <option selected>Short</option>
-            <option>Long</option>
-          </select>
-        </td>
-        <td><input id="entryPrice" value="1,915.00"></td>
-        <td><input id="liqPrice" value="2,050.00"></td>
-        <td><input id="pnl" value="-4,200,000.00 USDT"></td>
-        <td><input id="walletBalance" value="66,400,000.00 USDT"></td>
-        <td><input id="collateral" value="3,320,000.00 USDT"></td>
-        <td><a id="walletLink" href="https://hypurrscan.io/address/0x54D7" target="_blank">🔗 0x54D7</a></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div style="text-align:center; margin-top:20px;">
-    <button onclick="saveTrade()">💾 Speichern</button>
-  </div>
-
-  <script>
-    function saveTrade() {
-      const table = document.getElementById("tradesTable").getElementsByTagName("tbody")[0];
-
-      const position = document.getElementById("positionType").value;
-      const entry = document.getElementById("entryPrice").value;
-      const liq = document.getElementById("liqPrice").value;
-      const pnl = document.getElementById("pnl").value;
-      const balance = document.getElementById("walletBalance").value;
-      const collateral = document.getElementById("collateral").value;
-      const wallet = document.getElementById("walletLink").outerHTML;
-
-      const newRow = document.createElement("tr");
-      newRow.innerHTML = `
-        <td>${position}</td>
-        <td>${entry}</td>
-        <td>${liq}</td>
-        <td>${pnl}</td>
-        <td>${balance}</td>
-        <td>${collateral}</td>
-        <td>${wallet}</td>
-      `;
-
-      table.appendChild(newRow);
-    }
-  </script>
-</body>
-      </html>
+    .action-buttons {
+      display: flex;
+      gap: 6px;
