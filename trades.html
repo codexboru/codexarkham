@@ -16,6 +16,7 @@
         <th>Liquidationspreis</th>
         <th>PnL</th>
         <th>Wallet</th>
+        <th>Balance</th> <!-- 🜃 Neue Spalte -->
         <th>Speichern</th>
       </tr>
     </thead>
@@ -31,9 +32,9 @@
         <td><input type="number" step="0.01" placeholder="z.B. 21000.00"></td>
         <td><input type="text" placeholder="z.B. +123.45 USDT"></td>
         <td><input type="text" placeholder="z.B. 4567.89 USDT"></td>
+        <td><input type="text" placeholder="z.B. 7890.00 USDT"></td> <!-- Balance -->
         <td><button onclick="saveTrade(this)">💾</button></td>
       </tr>
-      <!-- Weitere Zeilen können dupliziert werden -->
     </tbody>
   </table>
 
@@ -45,9 +46,19 @@
       const liq = row.cells[2].querySelector("input").value;
       const pnl = row.cells[3].querySelector("input").value;
       const wallet = row.cells[4].querySelector("input").value;
+      const balance = row.cells[5].querySelector("input").value;
 
       console.log("Gespeichert:", {
         position,
         entry,
         liq,
         pnl,
+        wallet,
+        balance
+      });
+
+      row.style.backgroundColor = "#222"; // Ritualisiertes Feedback
+    }
+  </script>
+</body>
+</html>
