@@ -2,66 +2,52 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Offene Positionen – Resonanz</title>
-  <style>
-    body {
-      background-color: #0f0f0f;
-      color: #e0e0e0;
-      font-family: monospace;
-      padding: 2em;
-    }
-    h1 {
-      color: #ffcc00;
-    }
-    .position {
-      border-bottom: 1px dashed #444;
-      margin-bottom: 1em;
-      padding-bottom: 1em;
-    }
-  </style>
+  <title>Trades – Resonanzfragmente</title>
+  <link rel="stylesheet" href="flammen.css">
 </head>
 <body>
-  <h1>🜁 Offene Positionen</h1>
-  <div id="positions">Lade Resonanzdaten...</div>
+  <h1>🜂 Trades – Lebendige Fragmente</h1>
+
+  <table id="trades-table">
+    <thead>
+      <tr>
+        <th>Position</th>
+        <th>Einstiegspreis</th>
+        <th>Liquidationspreis</th>
+        <th>PnL</th>
+        <th>Wallet</th>
+        <th>Speichern</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <select>
+            <option>Long</option>
+            <option>Short</option>
+          </select>
+        </td>
+        <td><input type="number" step="0.01" placeholder="z.B. 23456.78"></td>
+        <td><input type="number" step="0.01" placeholder="z.B. 21000.00"></td>
+        <td><input type="text" placeholder="z.B. +123.45 USDT"></td>
+        <td><input type="text" placeholder="z.B. 4567.89 USDT"></td>
+        <td><button onclick="saveTrade(this)">💾</button></td>
+      </tr>
+      <!-- Weitere Zeilen können dupliziert werden -->
+    </tbody>
+  </table>
 
   <script>
-    const apiKey = 'xHeaUN17PcZA70BIgoIzcVsNg8ujhANmHUPzoMZMQGZn9is3LX57DsxSC24aM5Mv'; // 🔑 Nur API-Key, kein Secret nötig
-    const endpoint = 'https://fapi.binance.com/fapi/v2/account';
+    function saveTrade(button) {
+      const row = button.closest("tr");
+      const position = row.querySelector("select").value;
+      const entry = row.cells[1].querySelector("input").value;
+      const liq = row.cells[2].querySelector("input").value;
+      const pnl = row.cells[3].querySelector("input").value;
+      const wallet = row.cells[4].querySelector("input").value;
 
-    fetch(endpoint, {
-      method: 'GET',
-      headers: {
-        'X-MBX-APIKEY': apiKey
-      }
-    })
-    .then(response => response.json())
-    .then(data => {
-      const container = document.getElementById('positions');
-      container.innerHTML = '';
-
-      data.positions.forEach(pos => {
-        if (parseFloat(pos.positionAmt) !== 0) {
-          const entry = document.createElement('div');
-          entry.className = 'position';
-          entry.innerHTML = `
-            <strong>${pos.symbol}</strong><br>
-            🜂 Menge: ${pos.positionAmt}<br>
-            🜃 Einstiegspreis: ${pos.entryPrice}<br>
-            🜄 P&L: ${parseFloat(pos.unRealizedProfit).toFixed(2)} USDT<br>
-            🜁 Liquidationspreis: ${pos.liquidationPrice}
-          `;
-          container.appendChild(entry);
-        }
-      });
-
-      if (container.innerHTML === '') {
-        container.innerHTML = 'Keine offenen Positionen – der Spiegel ruht.';
-      }
-    })
-    .catch(error => {
-      document.getElementById('positions').innerText = 'Fehler beim Laden der Resonanzdaten.';
-      console.error('Resonanzfehler:', error);
-    });
-  </script>
-</body>
-</html>
+      console.log("Gespeichert:", {
+        position,
+        entry,
+        liq,
+        pnl,
