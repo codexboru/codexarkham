@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CodexArkham — Wallet Entblößung</title>
+  <style>
+    body {
+      background-color: #0d0d0d;
+      color: #e0e0e0;
+      font-family: monospace;
+      padding: 2rem;
+    }
+    input, button {
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin-right: 0.5rem;
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+      border: 1px solid #444;
+    }
+    .output {
+      margin-top: 2rem;
+      white-space: pre-wrap;
+      background-color: #111;
+      padding: 1rem;
+      border: 1px solid #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>🜂 CodexArkham</h1>
+  <p>Wallet-Adresse eingeben:</p>
+  <input type="text" id="walletInput" placeholder="0x..." />
+  <button onclick="fetchWalletData()">Entblößen</button>
+
+  <div class="output" id="output"></div>
+
+  <script>
+    const apiKey1 = 'XWEQM1FA1R4WRP8TRG7BAHF28QHTYN1GQ8';
+    const apiKey2 = 'EBR5CWADUQH9CY4HUVI5R2M828I48DURNF';
+
+    async function fetchWalletData() {
+      const wallet = document.getElementById('walletInput').value.trim();
+      const output = document.getElementById('output');
+      output.innerText = '⧉ Lade Daten...';
+
+      try {
+        const [txRes1, tokenRes1] = await Promise.all([
+          fetch(`https://api.etherscan.io/api?module=account&action=txlist&address=${wallet}&startblock=0&endblock=99999999&sort=desc&apikey=${apiKey1}`),
+          fetch(`https://api.etherscan.io/api?module=account&action=tokentx&address=${wallet}&startblock=0&endblock=99999999&sort=desc&apikey=${apiKey1}`)
+        ]);
+
+        const [txRes2, tokenRes2] = await Promise.all([
+          fetch(`https://api.etherscan.io/api?module=account&action=txlist&address=${wallet}&startblock=0&endblock=99999999&sort=desc&apikey=${apiKey2}`),
+          fetch(`https://api.etherscan.io/api?module=account&action=tokentx&address=${wallet}&startblock=0&endblock=99999999&sort=desc&apikey=${apiKey2}`)
+        ]);
+
+        const txData = [...(await txRes1.json()).result, ...(await txRes2.json()).result];
+        const tokenData = [...(await tokenRes1.json()).result, ...(await tokenRes2.json()).result];
+
+        let txOutput = '📜 Transaktionen:\n';
+        txData.slice(0, 10).forEach(tx => {
+          txOutput += `→ ${tx.hash}\n   From: ${tx.from}\n   To: ${tx.to}\n   Value: ${tx.value / 1e18} ETH\n   Time: ${new Date(tx.timeStamp * 1000).toLocaleString()}\n\n`;
+        });
+
+        let tokenOutput = '🪙 Token Transfers:\n';
+        tokenData.slice(0, 10).forEach(tok => {
+          tokenOutput += `→ ${tok.tokenName} (${tok.tokenSymbol})\n   From: ${tok.from}\n   To: ${tok.to}\n   Value: ${tok.value / Math.pow(10, tok.tokenDecimal)}\n   Time: ${new Date(tok.timeStamp * 1000).toLocaleString()}\n\n`;
+        });
+
+        output.innerText = txOutput + '\n' + tokenOutput;
+      } catch (err) {
+        output.innerText = '⚠️ Fehler beim Laden der Daten.';
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
