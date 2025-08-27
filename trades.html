@@ -69,6 +69,7 @@
       <tr>
         <th>Position</th>
         <th>Entry Price</th>
+        <th>Leverage</th>
         <th>Liquidation Price</th>
         <th>PnL</th>
         <th>Wallet Size</th>
@@ -85,9 +86,10 @@
             <option>Short</option>
           </select>
         </td>
-        <td><input id="entry" placeholder="Live-Preis wird geladen..."></td>
-        <td><input id="liq" placeholder="z.B. 2050.00"></td>
-        <td><input id="pnl" placeholder="z.B. -4200000.00 USDT"></td>
+        <td><input id="entry" placeholder="Live-Preis wird geladen..." oninput="calculateLiq()"></td>
+        <td><input id="leverage" placeholder="z.B. 20" oninput="calculateLiq()"></td>
+        <td><input id="liq" placeholder="Wird berechnet..." readonly></td>
+        <td><input id="pnl" placeholder="Wird berechnet..." readonly></td>
         <td><input id="balance" placeholder="z.B. 66400000.00 USDT"></td>
         <td><input id="collateral" placeholder="z.B. 3320000.00 USDT"></td>
         <td><input id="wallet" placeholder="z.B. 0x54D7"></td>
@@ -100,21 +102,68 @@
   <iframe id="ethChart" src="https://www.tradingview.com/chart/?symbol=BINANCE:ETHUSDT" allowfullscreen></iframe>
 
   <script>
+    let currentMarketPrice = null;
+
     async function fetchLivePrice() {
       try {
         const response = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT");
         const data = await response.json();
-        const livePrice = parseFloat(data.price).toFixed(2);
-        document.getElementById("entry").value = livePrice;
+        currentMarketPrice = parseFloat(data.price);
+        document.getElementById("entry").value = currentMarketPrice.toFixed(2);
+        calculateLiq();
+        calculatePnL();
       } catch (error) {
         console.error("Fehler beim Laden des Live-Preises:", error);
         document.getElementById("entry").value = "Fehler";
       }
     }
 
-    function saveTrade() {
+    function calculateLiq() {
+      const entry = parseFloat(document.getElementById("entry").value);
+      const leverage = parseFloat(document.getElementById("leverage").value);
+      const position = document.getElementById("position").value;
+
+      if (!entry || !leverage || leverage <= 0) {
+        document.getElementById("liq").value = "";
+        return;
+      }
+
+      let liq;
+      if (position === "Long") {
+        liq = entry * (1 - 1 / leverage);
+      } else {
+        liq = entry * (1 + 1 / leverage);
+      }
+
+      document.getElementById("liq").value = liq.toFixed(2);
+    }
+
+    function calculatePnL() {
+      const entry = parseFloat(document.getElementById("entry").value);
+      const leverage = parseFloat(document.getElementById("leverage").value);
+      const collateral = parseFloat(document.getElementById("collateral").value);
+      const position = document.getElementById("position").value;
+
+      if (!entry || !leverage || !collateral || !currentMarketPrice) {
+        document.getElementById("pnl").value = "";
+        return;
+      }
+
+      let diff = position === "Long"
+        ? currentMarketPrice - entry
+        : entry - currentMarketPrice;
+
+      let pnl = diff * leverage * (collateral / entry);
+      document.getElementById("pnl").value = pnl.toFixed(2) + " USDT";
+    }
+
+    async function saveTrade() {
+      await fetchLivePrice(); // Refresh market price before saving
+      calculatePnL();
+
       const position = document.getElementById("position").value;
       const entry = document.getElementById("entry").value;
+      const leverage = document.getElementById("leverage").value;
       const liq = document.getElementById("liq").value;
       const pnl = document.getElementById("pnl").value;
       const balance = document.getElementById("balance").value;
@@ -124,6 +173,7 @@
       const trade = {
         position,
         entry,
+        leverage,
         liq,
         pnl,
         balance,
@@ -152,6 +202,7 @@
         row.innerHTML = `
           <td class="${positionClass}">${trade.position}</td>
           <td>${trade.entry}</td>
+          <td>${trade.leverage}</td>
           <td>${trade.liq}</td>
           <td>${trade.pnl}</td>
           <td>${trade.balance}</td>
@@ -174,6 +225,7 @@
 
     function clearInputs() {
       document.getElementById("entry").value = "";
+      document.getElementById("leverage").value = "";
       document.getElementById("liq").value = "";
       document.getElementById("pnl").value = "";
       document.getElementById("balance").value = "";
@@ -183,17 +235,4 @@
 
     // Auto-Refresh des TradingView-Charts alle 60 Sekunden
     setInterval(() => {
-      const iframe = document.getElementById("ethChart");
-      if (iframe) {
-        iframe.src = iframe.src;
-      }
-    }, 60000);
-
-    // Initiales Laden
-    window.onload = () => {
-      renderTrades();
-      fetchLivePrice();
-    };
-  </script>
-</body>
-  </html>
+      const iframe = document.getElementById
