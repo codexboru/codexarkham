@@ -12,7 +12,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 40px;
+      margin-top: 20px;
     }
     th, td {
       border: 1px solid #444;
@@ -53,16 +53,36 @@
       gap: 6px;
       justify-content: center;
     }
-    iframe {
-      margin-top: 40px;
-      border: none;
-      width: 100%;
-      height: 500px;
+    .tradingview-widget-container {
+      margin-bottom: 40px;
     }
   </style>
 </head>
 <body>
   <h1>🜂 Trades Codex</h1>
+
+  <!-- TradingView Widget BEGIN -->
+  <div class="tradingview-widget-container">
+    <div id="tradingview_ethusdt"></div>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script type="text/javascript">
+      new TradingView.widget({
+        "width": "100%",
+        "height": 500,
+        "symbol": "BINANCE:ETHUSDT",
+        "interval": "1",
+        "timezone": "Etc/UTC",
+        "theme": "dark",
+        "style": "1",
+        "locale": "de",
+        "toolbar_bg": "#0f0f0f",
+        "enable_publishing": false,
+        "allow_symbol_change": false,
+        "container_id": "tradingview_ethusdt"
+      });
+    </script>
+  </div>
+  <!-- TradingView Widget END -->
 
   <table id="tradesTable">
     <thead>
@@ -86,20 +106,17 @@
             <option>Short</option>
           </select>
         </td>
-        <td><input id="entry" placeholder="Live-Preis wird geladen..." oninput="calculateLiq()"></td>
-        <td><input id="leverage" placeholder="z.B. 20" oninput="calculateLiq()"></td>
+        <td><input id="entry" placeholder="Live-Preis wird geladen..." oninput="calculateLiq(); calculatePnL();"></td>
+        <td><input id="leverage" placeholder="z.B. 20" oninput="calculateLiq(); calculatePnL();"></td>
         <td><input id="liq" placeholder="Wird berechnet..." readonly></td>
         <td><input id="pnl" placeholder="Wird berechnet..." readonly></td>
         <td><input id="balance" placeholder="z.B. 66400000.00 USDT"></td>
-        <td><input id="collateral" placeholder="z.B. 3320000.00 USDT"></td>
+        <td><input id="collateral" placeholder="z.B. 3320000.00 USDT" oninput="calculatePnL()"></td>
         <td><input id="wallet" placeholder="z.B. 0x54D7"></td>
         <td><button onclick="saveTrade()">💾 Speichern</button></td>
       </tr>
     </tbody>
   </table>
-
-  <!-- TradingView Live Chart -->
-  <iframe id="ethChart" src="https://www.tradingview.com/chart/?symbol=BINANCE:ETHUSDT" allowfullscreen></iframe>
 
   <script>
     let currentMarketPrice = null;
@@ -128,12 +145,9 @@
         return;
       }
 
-      let liq;
-      if (position === "Long") {
-        liq = entry * (1 - 1 / leverage);
-      } else {
-        liq = entry * (1 + 1 / leverage);
-      }
+      let liq = position === "Long"
+        ? entry * (1 - 1 / leverage)
+        : entry * (1 + 1 / leverage);
 
       document.getElementById("liq").value = liq.toFixed(2);
     }
@@ -158,27 +172,18 @@
     }
 
     async function saveTrade() {
-      await fetchLivePrice(); // Refresh market price before saving
+      await fetchLivePrice();
       calculatePnL();
 
-      const position = document.getElementById("position").value;
-      const entry = document.getElementById("entry").value;
-      const leverage = document.getElementById("leverage").value;
-      const liq = document.getElementById("liq").value;
-      const pnl = document.getElementById("pnl").value;
-      const balance = document.getElementById("balance").value;
-      const collateral = document.getElementById("collateral").value;
-      const wallet = document.getElementById("wallet").value;
-
       const trade = {
-        position,
-        entry,
-        leverage,
-        liq,
-        pnl,
-        balance,
-        collateral,
-        wallet
+        position: document.getElementById("position").value,
+        entry: document.getElementById("entry").value,
+        leverage: document.getElementById("leverage").value,
+        liq: document.getElementById("liq").value,
+        pnl: document.getElementById("pnl").value,
+        balance: document.getElementById("balance").value,
+        collateral: document.getElementById("collateral").value,
+        wallet: document.getElementById("wallet").value
       };
 
       let trades = JSON.parse(localStorage.getItem("trades")) || [];
@@ -191,7 +196,7 @@
 
     function renderTrades() {
       const body = document.getElementById("tradesBody");
-      body.innerHTML = document.querySelector("tr").outerHTML; // Keep input row
+      body.innerHTML = document.querySelector("tr").outerHTML;
 
       const trades = JSON.parse(localStorage.getItem("trades")) || [];
 
@@ -227,12 +232,4 @@
       document.getElementById("entry").value = "";
       document.getElementById("leverage").value = "";
       document.getElementById("liq").value = "";
-      document.getElementById("pnl").value = "";
-      document.getElementById("balance").value = "";
-      document.getElementById("collateral").value = "";
-      document.getElementById("wallet").value = "";
-    }
-
-    // Auto-Refresh des TradingView-Charts alle 60 Sekunden
-    setInterval(() => {
-      const iframe = document.getElementById
+      document.getElementById("pnl").[43dcd9a7-70db-4a1f-b0ae-981daa162054](https://github.com/elitebluestar/codecanyon/tree/25c1223077a852fe3dea036293ba6ce9b5d5f8f6/resources%2Fviews%2Fchart.blade.php?citationMarker=43dcd9a7-70db-4a1f-b0ae-981daa162054 "1")[43dcd9a7-70db-4a1f-b0ae-981daa162054](https://github.com/razerbite-dev/loyalcoin/tree/cad9780c15109f3c646a0db5127881076a0e1123/wp-content%2Fplugins%2Fpremiumcoding-crypto-coins%2Fincludes%2Fcurrencyprice.class.php?citationMarker=43dcd9a7-70db-4a1f-b0ae-981daa162054 "2")
