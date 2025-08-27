@@ -99,7 +99,17 @@
       </tr>
     </thead>
     <tbody id="tradesBody">
-      <tr>
+      <!-- Eingabezeile wird dynamisch hinzugefügt -->
+    </tbody>
+  </table>
+
+  <script>
+    let currentMarketPrice = null;
+
+    function createInputRow() {
+      const row = document.createElement("tr");
+      row.id = "inputRow";
+      row.innerHTML = `
         <td>
           <select id="position" onchange="fetchLivePrice()">
             <option>Long</option>
@@ -114,12 +124,9 @@
         <td><input id="collateral" placeholder="z.B. 3320000.00 USDT" oninput="calculatePnL()"></td>
         <td><input id="wallet" placeholder="z.B. 0x54D7"></td>
         <td><button onclick="saveTrade()">💾 Speichern</button></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <script>
-    let currentMarketPrice = null;
+      `;
+      document.getElementById("tradesBody").appendChild(row);
+    }
 
     async function fetchLivePrice() {
       try {
@@ -191,12 +198,12 @@
       localStorage.setItem("trades", JSON.stringify(trades));
 
       renderTrades();
-      clearInputs();
     }
 
     function renderTrades() {
       const body = document.getElementById("tradesBody");
-      body.innerHTML = document.querySelector("tr").outerHTML;
+      body.innerHTML = "";
+      createInputRow();
 
       const trades = JSON.parse(localStorage.getItem("trades")) || [];
 
@@ -228,8 +235,9 @@
       renderTrades();
     }
 
-    function clearInputs() {
-      document.getElementById("entry").value = "";
-      document.getElementById("leverage").value = "";
-      document.getElementById("liq").value = "";
-      document.getElementById("pnl").[43dcd9a7-70db-4a1f-b0ae-981daa162054](https://github.com/elitebluestar/codecanyon/tree/25c1223077a852fe3dea036293ba6ce9b5d5f8f6/resources%2Fviews%2Fchart.blade.php?citationMarker=43dcd9a7-70db-4a1f-b0ae-981daa162054 "1")[43dcd9a7-70db-4a1f-b0ae-981daa162054](https://github.com/razerbite-dev/loyalcoin/tree/cad9780c15109f3c646a0db5127881076a0e1123/wp-content%2Fplugins%2Fpremiumcoding-crypto-coins%2Fincludes%2Fcurrencyprice.class.php?citationMarker=43dcd9a7-70db-4a1f-b0ae-981daa162054 "2")
+    window.onload = () => {
+      renderTrades();
+    };
+  </script>
+</body>
+  </html>
