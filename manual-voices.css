@@ -1,0 +1,17 @@
+.manual-voice {
+  margin: 2em 0;
+  padding: 1em;
+  border: 1px solid #444;
+  background: #111;
+  color: #eee;
+}
+.voice-entry {
+  margin-top: 1em;
+  padding: 0.5em;
+  background: #222;
+  border-left: 4px solid lime;
+}
+.flame {
+  font-size: 1.5em;
+  margin-top: 0.5em;
+}
