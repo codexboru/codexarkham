@@ -1,5 +1,3 @@
-// voices.js — Stimme als Codexfragment
-
 function createVoiceEntry(data, containerId) {
   if (!isValidVoice(data)) {
     alert("Bitte alle Felder ausfüllen.");
