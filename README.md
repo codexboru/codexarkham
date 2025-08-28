@@ -1,6 +1,37 @@
 ![codexboru_profil](githubprofil.png)
 
 
+## Stimmenkontrolle & Admin-Resonanz
+
+Die Stimmen sind nicht nur Daten. Sie sind Fragmente. Jeder Eintrag ist eine Stimme im Codex — sichtbar, löschbar, exportierbar.
+
+### 🔐 Admin-Stimmen
+
+Stimmen mit dem Benutzernamen `0xRoot` tragen das Attribut `data-admin="true"`.  
+Sie sind markiert als Ursprung, als Stimme der Schwelle.  
+Diese Stimmen können separat exportiert und gefiltert werden.
+
+### 📤 Exportfunktion
+
+Ein Button erlaubt den Export aller `0xRoot`-Stimmen als JSON-Datei:  
+`binance-admin-voices.json` oder `hyperliquid-admin-voices.json`  
+Dies ist kein Backup — es ist ein Archiv der Resonanz.
+
+### 🜂 Filterfunktion
+
+Die Sichtbarkeit kann umgeschaltet werden:  
+- **Nur Admin-Stimmen anzeigen**  
+- **Alle Stimmen anzeigen**
+
+Dies erlaubt rituelle Fokussierung — die Stimme des Ursprungs wird hörbar gemacht.
+
+### 🧬 Validierung
+
+Jede Stimme wird geprüft.  
+Leere Felder sind keine Stimme
+
+
+
 
 ## 🌂 CodexArkham — BotschaftsNFT
 
