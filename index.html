@@ -56,6 +56,8 @@
     .tradingview-widget-container {
       margin-bottom: 40px;
     }
+
+    /* 🜁 Fremdstimmen-Stil */
     .foreign-voices {
       background-color: #1a1a1a;
       color: #ccc;
@@ -84,8 +86,8 @@
   <!-- TradingView Widget BEGIN -->
   <div class="tradingview-widget-container">
     <div id="tradingview_ethusdt"></div>
-    <script src="https://s3.tradingview.com/tv.js"></script>
-    <script>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script type="text/javascript">
       new TradingView.widget({
         "width": "100%",
         "height": 500,
@@ -123,8 +125,49 @@
     </tbody>
   </table>
 
+  <!-- 🔗 Ritualisierte Einbettung der JavaScript-Seele -->
   <script src="trades-script.js"></script>
 
+   <!-- Binance Stimme -->
+<section class="manual-voice">
+  <h2>🜂 Stimme der Tiefe – Binance ETH</h2>
+  <form id="binance-form">
+    <input type="text" placeholder="Username" id="binance-username">
+    <input type="number" placeholder="Entry Price" id="binance-entry">
+    <input type="number" placeholder="Leverage" id="binance-leverage">
+    <input type="number" placeholder="Size" id="binance-size">
+    <input type="number" placeholder="Liquidation Price" id="binance-liq">
+    <input type="datetime-local" id="binance-time">
+    <input type="number" placeholder="PnL (USD)" id="binance-pnl">
+    <input type="number" placeholder="ROI (%)" id="binance-roi">
+    <button type="submit">Stimme speichern</button>
+  </form>
+  <div id="binance-voices"></div>
+</section>
+
+<!-- Hyperliquid Stimme -->
+<section class="manual-voice">
+  <h2>🜁 Stimme der Oberfläche – Hyperliquid</h2>
+  <form id="hyperliquid-form">
+    <input type="text" placeholder="Username" id="hyperliquid-username">
+    <input type="number" placeholder="Entry Price" id="hyperliquid-entry">
+    <input type="number" placeholder="Leverage" id="hyperliquid-leverage">
+    <input type="number" placeholder="Size" id="hyperliquid-size">
+    <input type="number" placeholder="Liquidation Price" id="hyperliquid-liq">
+    <input type="datetime-local" id="hyperliquid-time">
+    <input type="number" placeholder="PnL (USD)" id="hyperliquid-pnl">
+    <input type="number" placeholder="ROI (%)" id="hyperliquid-roi">
+    <button type="submit">Stimme speichern</button>
+  </form>
+  <div id="hyperliquid-voices"></div>
+</section>
+
+
+
+
+
+
+  
   <!-- 🜃 Fremde Stimmen – Hyperliquid ETH Leaderboard -->
   <div class="foreign-voices">
     <h2>Fremde Stimmen – Hyperliquid ETH Leaderboard</h2>
@@ -132,17 +175,6 @@
   </div>
   <script src="flame-generator.js"></script>
   <script>
-    function generateFlameSVG(pnl, size) {
-      const height = Math.min(Math.abs(pnl) * 2 + size * 0.5, 120);
-      const color = pnl >= 0 ? "#00ff99" : "#ff66cc";
-      return `
-        <svg width="100" height="${height}" viewBox="0 0 100 ${height}" xmlns="http://www.w3.org/2000/svg">
-          <path d="M50 ${height} Q40 ${height - 40}, 50 ${height - 80} Q60 ${height - 40}, 50 ${height}" 
-                fill="${color}" stroke="#222" stroke-width="2"/>
-        </svg>
-      `;
-    }
-
     fetch('https://api.hyperliquid.xyz/info?type=leaderboard')
       .then(res => res.json())
       .then(data => {
@@ -182,17 +214,6 @@
     </div>
   </div>
   <script>
-    function generateBinanceFlameSVG(pnl, size) {
-      const height = Math.min(Math.abs(pnl) * 2 + size * 0.5, 120);
-      const color = pnl >= 0 ? "#00ff99" : "#ff3366";
-      return `
-        <svg width="100" height="${height}" viewBox="0 0 100 ${height}" xmlns="http://www.w3.org/2000/svg">
-          <path d="M50 ${height} Q40 ${height - 40}, 50 ${height - 80} Q60 ${height - 40}, 50 ${height}" 
-                fill="${color}" stroke="#222" stroke-width="2"/>
-        </svg>
-      `;
-    }
-
     fetch("https://binance-leaderboard-api.vercel.app/api/leaderboard?symbol=ETHUSDT")
       .then(res => res.json())
       .then(data => {
@@ -209,7 +230,6 @@
             <span style="color:${liqColor}">Liq: ${trader.liquidationPrice || "—"}</span><br>
             <span style="color:${pnlColor}">PnL: ${trader.pnl}</span><br>
             Size: ${trader.positionSize}<br>
-            <div class="flame">${generateBinanceFlameSVG(trader.pnl, trader.positionSize)}</div>
             <hr>
           `;
           container.appendChild(div);
