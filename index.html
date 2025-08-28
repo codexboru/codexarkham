@@ -66,10 +66,13 @@
       <option value="LONG">LONG</option>
       <option value="SHORT">SHORT</option>
     </select>
-    <button onclick="saveVoice()">Stimme speichern</button>
-    <button onclick="exportVoices()">Export JSON</button>
-    <input type="file" id="restoreFile" onchange="restoreVoices(this)">
-  </div>
+    <button onclick="saveVoiceHandler()">Stimme speichern</button>
+<button onclick="exportVoicesHandler()">Export JSON</button>
+<input type="file" onchange="restoreVoicesHandler(this)">
+    
+    
+    
+</div>
 
   <h2>📈 Chart</h2>
   <div class="tradingview-widget-container">
