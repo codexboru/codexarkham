@@ -56,6 +56,25 @@
     .tradingview-widget-container {
       margin-bottom: 40px;
     }
+
+    /* Fremdstimmen-Stil */
+    .foreign-voices {
+      background-color: #1a1a1a;
+      color: #ccc;
+      padding: 20px;
+      margin-top: 40px;
+      border-top: 2px dashed #555;
+    }
+    .trader-entry {
+      margin-bottom: 15px;
+      padding: 10px;
+      background-color: #2a2a2a;
+      border-left: 4px solid #888;
+    }
+    .trader-entry:hover {
+      background-color: #333;
+      border-left-color: #ff4444;
+    }
   </style>
 </head>
 <body>
@@ -105,5 +124,41 @@
 
   <!-- 🔗 Ritualisierte Einbettung der JavaScript-Seele -->
   <script src="trades-script.js"></script>
+
+  <!-- 🜁 Fremde Stimmen – Hyperliquid ETH Leaderboard -->
+  <div class="foreign-voices">
+    <h2>Fremde Stimmen – Hyperliquid ETH Leaderboard</h2>
+    <div id="hyperliquid-traders"></div>
+  </div>
+  <script>
+    fetch('https://api.hyperliquid.xyz/info?type=leaderboard')
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('hyperliquid-traders');
+        let count = 0;
+
+        data.traders.forEach(trader => {
+          const ethPosition = trader.positions.find(p => p.coin === 'ETH');
+          if (ethPosition && count < 20) {
+            const div = document.createElement('div');
+            div.className = 'trader-entry';
+
+            const pnlColor = ethPosition.pnl > 0 ? '#00ff99' : '#ff66cc';
+            const liqColor = '#ff4444';
+
+            div.innerHTML = `
+              <strong>${trader.name}</strong><br>
+              Entry: ${ethPosition.entryPx}<br>
+              <span style="color:${liqColor}">Liq: ${ethPosition.liqPx}</span><br>
+              <span style="color:${pnlColor}">PnL: ${ethPosition.pnl.toFixed(2)}</span><br>
+              Size: ${ethPosition.sz}<br>
+              <hr>
+            `;
+            container.appendChild(div);
+            count++;
+          }
+        });
+      });
+  </script>
 </body>
-</html>
+  </html>
