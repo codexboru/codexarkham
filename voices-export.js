@@ -33,3 +33,30 @@ function exportVoices() {
   a.click();
   URL.revokeObjectURL(url);
       }
+
+
+function exportVoices() {
+  const voices = [];
+  document.querySelectorAll(".voice-entry").forEach(div => {
+    const lines = div.innerText.split("\n");
+    const username = lines[0].trim();
+    const entry = parseFloat(lines[1].match(/Entry:\s([\d.]+)/)[1]);
+    const leverage = parseFloat(lines[1].match(/Leverage:\s([\d.]+)x/)[1]);
+    const size = parseFloat(lines[2].match(/Size:\s([\d.]+)/)[1]);
+    const liq = parseFloat(lines[2].match(/Liq:\s([\d.]+)/)[1]);
+    const pnl = parseFloat(lines[3].match(/PnL:\s(-?[\d.]+)/)[1]);
+    const roi = parseFloat(lines[3].match(/ROI:\s(-?[\d.]+)%/)[1]);
+    const timestamp = new Date(lines[4].replace("Timestamp: ", "")).toISOString();
+    const source = div.parentElement.id.includes("binance") ? "Binance" : "Hyperliquid";
+
+    voices.push({ source, username, entry, leverage, size, liq, timestamp, pnl, roi });
+  });
+
+  const blob = new Blob([JSON.stringify(voices, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "voices-export.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
