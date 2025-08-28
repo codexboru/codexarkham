@@ -2,6 +2,12 @@ function createVoiceEntry(data, containerId) {
   const flame = `<div class="flame" style="color:${data.pnl < 0 ? 'red' : 'lime'}">🔥</div>`;
   const div = document.createElement("div");
   div.className = "voice-entry";
+
+  // 🜂 Admin-Stimme markieren
+  if (data.username === "0xRoot") {
+    div.setAttribute("data-admin", "true");
+  }
+
   div.innerHTML = `
     <strong>${data.username}</strong><br>
     Entry: ${data.entry} | Leverage: ${data.leverage}x<br>
