@@ -58,3 +58,17 @@ window.deleteVoiceAndRender = function(index) {
 // 🜄 Export & Wiederherstellung
 window.exportVoicesHandler = exportVoices;
 window.restoreVoicesHandler = restoreVoices;
+
+document.addEventListener("DOMContentLoaded", function () {
+  const toggleButton = document.getElementById("toggleChart");
+  const chartContainer = document.getElementById("chartContainer");
+
+  if (toggleButton && chartContainer) {
+    toggleButton.addEventListener("click", function () {
+      const isHidden = chartContainer.style.display === "none" || chartContainer.style.display === "";
+
+      chartContainer.style.display = isHidden ? "block" : "none";
+      toggleButton.textContent = isHidden ? "Chart schließen" : "Chart öffnen";
+    });
+  }
+});
