@@ -1,8 +1,10 @@
 // main.js
-import { voices, saveVoice, renderVoice, updateLocalStorage } from './voices.js';
-import { renderTableRow } from './table.js';
+
+import { voices, saveVoice, renderVoice, updateLocalStorage, deleteVoice } from './voices.js';
+import { renderTableRow, renderTable } from './table.js';
 import { exportVoices, restoreVoices } from './export.js';
 
+// 🜁 Initiales Laden der gespeicherten Stimmen
 window.onload = function() {
   const stored = localStorage.getItem("voices");
   if (stored) {
@@ -10,11 +12,12 @@ window.onload = function() {
     parsed.forEach(v => {
       voices.push(v);
       renderVoice(v);
-      renderTableRow(v);
+      renderTableRow(v, voices.length - 1); // Index korrekt setzen
     });
   }
 };
 
+// 🜂 Neue Stimme speichern und darstellen
 window.saveVoiceHandler = function() {
   const direction = document.getElementById("direction").value;
   if (direction !== "LONG" && direction !== "SHORT") {
@@ -43,28 +46,15 @@ window.saveVoiceHandler = function() {
 
   saveVoice(data);
   renderVoice(data);
-  renderTableRow(data);
+  renderTableRow(data, voices.length - 1);
 };
 
+// 🜃 Stimme löschen und Tabelle neu rendern
+window.deleteVoiceAndRender = function(index) {
+  deleteVoice(index);   // Modul aus voices.js
+  renderTable();        // Modul aus table.js
+};
+
+// 🜄 Export & Wiederherstellung
 window.exportVoicesHandler = exportVoices;
 window.restoreVoicesHandler = restoreVoices;
-
-
-      import { deleteVoice } from './voices.js';
-import { renderTable } from './table.js';
-
-window.deleteVoiceAndRender = function(id) {
-  deleteVoice(id);
-  renderTable();
-};
-
-window.deleteVoiceAndRender = function(index) {
-  voices.splice(index, 1);
-  localStorage.setItem("voices", JSON.stringify(voices));
-  document.getElementById("voiceContainer").innerHTML = "";
-  document.getElementById("voicesBody").innerHTML = "";
-  voices.forEach((v, i) => {
-    renderVoice(v);
-    renderTableRow(v, i);
-  });
-};
