@@ -56,8 +56,6 @@
     .tradingview-widget-container {
       margin-bottom: 40px;
     }
-
-    /* 🜁 Fremdstimmen-Stil */
     .foreign-voices {
       background-color: #1a1a1a;
       color: #ccc;
@@ -97,11 +95,10 @@
 <body>
   <h1>🜂 Trades Codex</h1>
 
-  <!-- TradingView Widget BEGIN -->
   <div class="tradingview-widget-container">
     <div id="tradingview_ethusdt"></div>
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-    <script type="text/javascript">
+    <script src="https://s3.tradingview.com/tv.js"></script>
+    <script>
       new TradingView.widget({
         "width": "100%",
         "height": 500,
@@ -118,7 +115,6 @@
       });
     </script>
   </div>
-  <!-- TradingView Widget END -->
 
   <table id="tradesTable">
     <thead>
@@ -134,12 +130,9 @@
         <th>Aktion</th>
       </tr>
     </thead>
-    <tbody id="tradesBody">
-      <!-- Eingabezeile und gespeicherte Trades werden per JS erzeugt -->
-    </tbody>
+    <tbody id="tradesBody"></tbody>
   </table>
 
-  <!-- 🜂 Stimme der Tiefe – Binance ETH -->
   <section class="manual-voice">
     <h2>🜂 Stimme der Tiefe – Binance ETH</h2>
     <form id="binance-form">
@@ -156,7 +149,6 @@
     <div id="binance-voices"></div>
   </section>
 
-  <!-- 🜁 Stimme der Oberfläche – Hyperliquid -->
   <section class="manual-voice">
     <h2>🜁 Stimme der Oberfläche – Hyperliquid</h2>
     <form id="hyperliquid-form">
@@ -173,21 +165,21 @@
     <div id="hyperliquid-voices"></div>
   </section>
 
-  <!-- 🜃 Fremde Stimmen – Hyperliquid ETH Leaderboard -->
+  <div style="text-align:center; margin:2em 0;">
+    <button onclick="exportVoices()">🔁 Stimmen exportieren</button>
+    <button onclick="restoreVoices()">🧭 Stimmen wiederherstellen</button>
+  </div>
+
   <div class="foreign-voices">
     <h2>Fremde Stimmen – Hyperliquid ETH Leaderboard</h2>
     <div id="hyperliquid-traders"></div>
   </div>
 
-  <!-- 🜁 Fremde Stimmen – Binance ETH Leaderboard -->
   <div class="foreign-voices">
     <h2>Fremde Stimmen – Binance ETH Leaderboard</h2>
-    <div id="binance-eth-leaderboard">
-      <p>Lade Stimmen …</p>
-    </div>
+    <div id="binance-eth-leaderboard"><p>Lade Stimmen …</p></div>
   </div>
 
-  <!-- 🔥 Eingebettete JavaScript-Seele -->
   <script>
     function createVoiceEntry(data, containerId) {
       const flame = `<div class="flame" style="color:${data.pnl < 0 ? 'red' : 'lime'}">🔥</div>`;
@@ -230,10 +222,63 @@
         liq: hyperliquid-liq.value,
         time: hyperliquid-time.value,
         pnl: hyperliquid-pnl.value,
-        roi:[43dcd9a7-70db-4a1f-b0ae-981daa162054](https://github.com/elitebluestar/codecanyon/tree/25c1223077a852fe3dea036293ba6ce9b5d5f8f6/resources%2Fviews%2Fchart.blade.php?citationMarker=43dcd9a7-70db-4a1f-b0ae-981daa162054 "1")[43dcd9a7-70db-4a1f-b0ae-981daa162054](https://github.com/razerbite-dev/loyalcoin/tree/cad9780c15109f3c646a0db5127881076a0e1123/wp-content%2Fplugins%2Fpremiumcoding-crypto-coins%2Fincludes%2Fcurrencyprice.class.php?citationMarker=43dcd9a7-70db-4a1f-b0ae-981daa162054 "2")
+        roi: hyperliquid-roi.value
+      }, "hyperliquid-voices");
+    });
 
-    <script src="flame-generator.js"></script>
-  <script>
+    function exportVoices() {
+      const voices = [];
+      document.querySelectorAll(".voice-entry").forEach(div => {
+        const lines = div.innerText.split("\n");
+        const username = lines[0].trim();
+        const entry = parseFloat(lines[1].match(/Entry:\s([\d.]+)/)[1]);
+        const leverage = parseFloat(lines[1].match(/Leverage:\s([\d.]+)x
+
+
+   const leverage = parseFloat(lines[1].match(/Leverage:\s([\d.]+)x/)[1]);
+        const size = parseFloat(lines[2].match(/Size:\s([\d.]+)/)[1]);
+        const liq = parseFloat(lines[2].match(/Liq:\s([\d.]+)/)[1]);
+        const pnl = parseFloat(lines[3].match(/PnL:\s(-?[\d.]+)/)[1]);
+        const roi = parseFloat(lines[3].match(/ROI:\s(-?[\d.]+)%/)[1]);
+        const timestamp = new Date(lines[4].replace("Timestamp: ", "")).toISOString();
+        const source = div.parentElement.id.includes("binance") ? "Binance" : "Hyperliquid";
+
+        voices.push({ source, username, entry, leverage, size, liq, timestamp, pnl, roi });
+      });
+
+      const blob = new Blob([JSON.stringify(voices, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "voices-export.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function restoreVoices() {
+      const url = "https://raw.githubusercontent.com/dein-user/dein-repo/main/voices.json"; // ← Pfad anpassen
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("binance-voices").innerHTML = "";
+          document.getElementById("hyperliquid-voices").innerHTML = "";
+          data.forEach(entry => {
+            const containerId = entry.source === "Binance" ? "binance-voices" : "hyperliquid-voices";
+            createVoiceEntry({
+              username: entry.username,
+              entry: entry.entry,
+              leverage: entry.leverage,
+              size: entry.size,
+              liq: entry.liq,
+              time: new Date(entry.timestamp).toLocaleString(),
+              pnl: entry.pnl,
+              roi: entry.roi
+            }, containerId);
+          });
+        })
+        .catch(err => console.error("Fehler beim Wiederherstellen der Stimmen:", err));
+    }
+
     fetch('https://api.hyperliquid.xyz/info?type=leaderboard')
       .then(res => res.json())
       .then(data => {
@@ -288,4 +333,4 @@
       });
   </script>
 </body>
-</html>
+</html>                                                
