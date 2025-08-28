@@ -10,7 +10,7 @@
       font-family: monospace;
       padding: 20px;
     }
-    input, button {
+    input, select, button {
       padding: 6px;
       margin: 4px;
       background-color: #222;
@@ -21,7 +21,14 @@
       border: 1px solid #555;
       padding: 10px;
       margin: 10px 0;
-      background-color: #1a1a1a;
+    }
+    .voice-box.long {
+      background-color: #003300;
+      border-color: #00cc66;
+    }
+    .voice-box.short {
+      background-color: #330000;
+      border-color: #ff3333;
     }
     table {
       width: 100%;
@@ -38,8 +45,8 @@
       cursor: pointer;
     }
     svg.flame {
-      width: 20px;
-      height: 20px;
+      width: 24px;
+      height: 24px;
     }
   </style>
 </head>
@@ -55,6 +62,10 @@
     <input type="text" id="liq" placeholder="Liq">
     <input type="text" id="pnl" placeholder="PnL">
     <input type="text" id="roi" placeholder="ROI">
+    <select id="direction">
+      <option value="LONG">LONG</option>
+      <option value="SHORT">SHORT</option>
+    </select>
     <button onclick="saveVoice()">Stimme speichern</button>
     <button onclick="exportVoices()">Export JSON</button>
     <input type="file" id="restoreFile" onchange="restoreVoices(this)">
@@ -69,7 +80,7 @@
         "width": "100%",
         "height": 400,
         "symbol": "BINANCE:ETHUSDT",
-        "interval": "1",
+        "interval": "15",
         "timezone": "Etc/UTC",
         "theme": "dark",
         "style": "1",
@@ -94,6 +105,7 @@
         <th onclick="sortTable(5)">PnL</th>
         <th onclick="sortTable(6)">ROI</th>
         <th onclick="sortTable(7)">Time</th>
+        <th onclick="sortTable(8)">Richtung</th>
         <th>🔥</th>
         <th>Aktion</th>
       </tr>
@@ -101,6 +113,7 @@
     <tbody id="voicesBody"></tbody>
   </table>
 
+  <script src="flame.js"></script>
   <script>
     let voices = [];
 
@@ -116,6 +129,12 @@
     };
 
     function saveVoice() {
+      const direction = document.getElementById("direction").value;
+      if (direction !== "LONG" && direction !== "SHORT") {
+        alert("Nur LONG oder SHORT erlaubt.");
+        return;
+      }
+
       const data = {
         username: document.getElementById("username").value,
         entry: document.getElementById("entry").value,
@@ -124,7 +143,15 @@
         liq: document.getElementById("liq").value,
         pnl: document.getElementById("pnl").value,
         roi: document.getElementById("roi").value,
-        time: new Date().toLocaleTimeString()
+        direction: direction,
+        time: new Date().toLocaleString("de-DE", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit"
+        })
       };
       voices.push(data);
       updateLocalStorage();
@@ -134,11 +161,12 @@
 
     function renderVoice(data) {
       const box = document.createElement("div");
-      box.className = "voice-box";
+      box.className = `voice-box ${data.direction === "LONG" ? "long" : "short"}`;
       box.innerHTML = `
-        <strong>${data.username}</strong><br>
+        <strong>${data.direction === "LONG" ? "🟢🜂" : "🔴🜂"} ${data.username}</strong><br>
         Entry: ${data.entry} | Leverage: ${data.leverage}x | Size: ${data.size}<br>
         Liq: ${data.liq} | PnL: ${data.pnl} | ROI: ${data.roi}%<br>
+        Richtung: ${data.direction}<br>
         <small>${data.time}</small>
       `;
       document.getElementById("voiceContainer").appendChild(box);
@@ -155,16 +183,13 @@
         <td>${data.pnl}</td>
         <td>${data.roi}%</td>
         <td>${data.time}</td>
-        <td>${getFlameSVG(data.roi)}</td>
+        <td style="background-color:${data.direction === 'LONG' ? '#004d00' : '#660000'}; color:#fff;">
+          ${data.direction}
+        </td>
+        <td>${getFlameSVG(data.roi, data.direction)}</td>
         <td><button onclick="deleteRow(this)">❌</button></td>
       `;
       document.getElementById("voicesBody").appendChild(row);
-    }
-
-    function getFlameSVG(roi) {
-      const intensity = Math.min(Math.max(parseFloat(roi), 0), 100);
-      const color = intensity > 50 ? "#ff4500" : "#ffaa00";
-      return `<svg class="flame" viewBox="0 0 24 24"><path fill="${color}" d="M12 2C10 6 6 8 6 13c0 3.3 2.7 6 6 6s6-2.7 6-6c0-5-4-7-6-11z"/></svg>`;
     }
 
     function deleteRow(btn) {
@@ -216,7 +241,9 @@
       rows.sort((a, b) => {
         const aText = a.cells[colIndex].textContent.replace(/[^0-9.-]/g, "");
         const bText = b.cells[colIndex].textContent.replace(/[^0-9.-]/g, "");
-        return isNumeric ? parseFloat(bText) - parseFloat(aText) : aText.localeCompare(bText);
+        return isNumeric ? parseFloat(bText) -
+
+          return isNumeric ? parseFloat(bText) - parseFloat(aText) : aText.localeCompare(bText);
       });
       rows.forEach(row => tbody.appendChild(row));
     }
