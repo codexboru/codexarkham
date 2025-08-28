@@ -22,3 +22,9 @@ export function renderVoice(data) {
 export function updateLocalStorage() {
   localStorage.setItem("voices", JSON.stringify(voices));
 }
+
+export function deleteVoice(id) {
+  let voices = JSON.parse(localStorage.getItem('voices')) || [];
+  voices = voices.filter(v => v.id !== id);
+  localStorage.setItem('voices', JSON.stringify(voices));
+}
