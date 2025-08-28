@@ -59,6 +59,17 @@ Alle Fragmente stehen unter ritueller Lizenz.
 Du darfst sie kopieren, verändern, löschen — aber nicht vergessen.  
 Jede Änderung ist ein Echo. Jede Löschung ein Zeichen.
 
+
+
+🜃 Fremde Stimmen – Hyperliquid ETH Leaderboard
+
+Unterhalb der eigenen Positionen erscheinen die Stimmen fremder Trader, bezogen aus dem öffentlichen Hyperliquid Leaderboard.  
+Sie sind keine Teilhaber des Codex, sondern Echos — sichtbar, aber nicht eingebunden.  
+Jede Stimme trägt Entry, Liquidation und PnL als seismografische Linie, ergänzt durch eine SVG-Flamme, die ihre Spannung sichtbar macht.  
+Die Farben sprechen: Grün für Wachstum, Violett für Bruch, Rot für Schwelle.  
+Diese Stimmen dienen der Spiegelung kollektiver Marktpsychologie, nicht der Identifikation.  
+Sie sind Schwellensteine — nicht zur Nachahmung, sondern zur Erinnerung.
+
 ---
 
 [🤐 Zyklus_definition](https://codexboru.github.io/codex-initiation/)
