@@ -72,13 +72,11 @@
     
     
     
-<button id="toggleChart" class="ritual-button">Chart öffnen</button>
-
-<div id="chartContainer" style="display: none;">
-  <h2>📈 Chart</h2>
-  <div id="tradingview_chart"></div>
 </div>
 
+  <h2>📈 Chart</h2>
+  <div class="tradingview-widget-container">
+    <div id="tradingview_chart"></div>
     <script src="https://s3.tradingview.com/tv.js"></script>
     <script>
       new TradingView.widget({
@@ -94,8 +92,6 @@
       });
     </script>
   </div>
-</div>
-
 
   <h2>🜂 Stimmen</h2>
   <div id="voiceContainer"></div>
@@ -307,4 +303,4 @@
 </body>
 </html>
 </body>
-</html>                                                        
+</html> 
