@@ -1,7 +1,10 @@
 // table.js
-import { voices, updateLocalStorage } from './voices.js';
 
-export function renderTableRow(data) {
+import { voices } from './voices.js';
+import { renderVoice } from './voices.js';
+
+// 🜁 Einzelne Zeile rendern
+export function renderTableRow(data, index) {
   const row = document.createElement("tr");
   row.innerHTML = `
     <td>${data.username}</td>
@@ -16,20 +19,22 @@ export function renderTableRow(data) {
       ${data.direction}
     </td>
     <td>${getFlameSVG(data.roi, data.direction)}</td>
-    <td><button onclick="deleteRow(this)">❌</button></td>
+    <td><button onclick="deleteVoiceAndRender(${index})">❌</button></td>
   `;
   document.getElementById("voicesBody").appendChild(row);
 }
 
-export function deleteRow(btn) {
-  const row = btn.closest("tr");
-  const index = row.rowIndex - 1;
-  voices.splice(index, 1);
-  updateLocalStorage();
-  row.remove();
-  document.getElementById("voiceContainer").children[index]?.remove();
+// 🜂 Gesamte Tabelle neu rendern
+export function renderTable() {
+  document.getElementById("voiceContainer").innerHTML = "";
+  document.getElementById("voicesBody").innerHTML = "";
+  voices.forEach((v, i) => {
+    renderVoice(v);
+    renderTableRow(v, i);
+  });
 }
 
+// 🜃 SVG-Flamme nach ROI und Richtung
 export function getFlameSVG(roi, direction) {
   const color = direction === "LONG" ? "#00ff66" : "#ff0033";
   return `
