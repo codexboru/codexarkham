@@ -57,3 +57,14 @@ window.deleteVoiceAndRender = function(id) {
   deleteVoice(id);
   renderTable();
 };
+
+window.deleteVoiceAndRender = function(index) {
+  voices.splice(index, 1);
+  localStorage.setItem("voices", JSON.stringify(voices));
+  document.getElementById("voiceContainer").innerHTML = "";
+  document.getElementById("voicesBody").innerHTML = "";
+  voices.forEach((v, i) => {
+    renderVoice(v);
+    renderTableRow(v, i);
+  });
+};
