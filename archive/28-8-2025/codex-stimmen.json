@@ -64,5 +64,71 @@
     "roi": "-52.25",
     "direction": "SHORT",
     "time": "28.08.2025, 15:01:24"
+  },
+  {
+    "username": "top trader 1",
+    "entry": "",
+    "leverage": "",
+    "size": "",
+    "liq": "4445.3",
+    "pnl": "",
+    "roi": "",
+    "direction": "LONG",
+    "time": "28.08.2025, 15:07:30"
+  },
+  {
+    "username": "top trader 2",
+    "entry": "",
+    "leverage": "",
+    "size": "",
+    "liq": "4401.2",
+    "pnl": "",
+    "roi": "",
+    "direction": "LONG",
+    "time": "28.08.2025, 15:07:44"
+  },
+  {
+    "username": "top trader 3",
+    "entry": "",
+    "leverage": "",
+    "size": "",
+    "liq": "4051.1",
+    "pnl": "",
+    "roi": "",
+    "direction": "LONG",
+    "time": "28.08.2025, 15:07:57"
+  },
+  {
+    "username": "top trader 4",
+    "entry": "",
+    "leverage": "",
+    "size": "",
+    "liq": "4943.5",
+    "pnl": "",
+    "roi": "",
+    "direction": "SHORT",
+    "time": "28.08.2025, 15:08:11"
+  },
+  {
+    "username": "top trader 5",
+    "entry": "",
+    "leverage": "",
+    "size": "",
+    "liq": "5015.3",
+    "pnl": "",
+    "roi": "",
+    "direction": "SHORT",
+    "time": "28.08.2025, 15:08:19"
+  },
+  {
+    "username": "top trader 6",
+    "entry": "",
+    "leverage": "",
+    "size": "",
+    "liq": "5096.40",
+    "pnl": "",
+    "roi": "",
+    "direction": "SHORT",
+    "time": "28.08.2025, 15:08:33"
   }
 ]
