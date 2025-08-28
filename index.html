@@ -1,136 +1,212 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Trades Codex</title>
-  <link rel="stylesheet" href="voices.css">
+  <meta charset="UTF-8" />
+  <title>Codex Stimme</title>
   <style>
     body {
-      background-color: #0f0f0f;
-      color: #f8f8f8;
+      background-color: #111;
+      color: #eee;
       font-family: monospace;
+      padding: 20px;
     }
     input, button {
-      background-color: #222;
-      color: #f8f8f8;
-      border: none;
       padding: 6px;
-      margin: 4px 0;
-      width: 100%;
+      margin: 4px;
+      background-color: #222;
+      color: #eee;
+      border: 1px solid #444;
     }
-    button {
-      background-color: #ff4d4d;
+    .voice-box {
+      border: 1px solid #555;
+      padding: 10px;
+      margin: 10px 0;
+      background-color: #1a1a1a;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 30px;
+    }
+    th, td {
+      border: 1px solid #444;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #222;
       cursor: pointer;
     }
-    button:hover {
-      background-color: #ff1a1a;
-    }
-    .manual-voice {
-      margin: 2em 0;
-      padding: 1em;
-      border: 1px solid #444;
-      background: #111;
-    }
-    .voice-entry {
-      margin-top: 1em;
-      padding: 0.5em;
-      background: #222;
-      border-left: 4px solid lime;
-    }
-    .voice-entry[data-admin="true"] {
-      border-left: 4px solid gold;
-      background-color: #1a1a1a;
-      box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
-    }
-    .flame {
-      font-size: 1.5em;
-      margin-top: 10px;
-    }
-    .foreign-voices {
-      background-color: #1a1a1a;
-      color: #ccc;
-      padding: 20px;
-      margin-top: 40px;
-      border-top: 2px dashed #555;
+    svg.flame {
+      width: 20px;
+      height: 20px;
     }
   </style>
 </head>
 <body>
-  <h1>🜂 Trades Codex</h1>
 
-  <div class="tradingview-widget-container">
-    <div id="tradingview_ethusdt"></div>
-    <script src="https://s3.tradingview.com/tv.js"></script>
-    <script>
-      new TradingView.widget({
-        "width": "100%",
-        "height": 500,
-        "symbol": "BINANCE:ETHUSDT",
-        "interval": "1",
-        "timezone": "Etc/UTC",
-        "theme": "dark",
-        "style": "1",
-        "locale": "de",
-        "toolbar_bg": "#0f0f0f",
-        "enable_publishing": false,
-        "allow_symbol_change": false,
-        "container_id": "tradingview_ethusdt"
+  <h1>🜂 Stimme speichern</h1>
+
+  <div>
+    <input type="text" id="username" placeholder="Username">
+    <input type="text" id="entry" placeholder="Entry">
+    <input type="text" id="leverage" placeholder="Leverage">
+    <input type="text" id="size" placeholder="Size">
+    <input type="text" id="liq" placeholder="Liq">
+    <input type="text" id="pnl" placeholder="PnL">
+    <input type="text" id="roi" placeholder="ROI">
+    <button onclick="saveVoice()">Stimme speichern</button>
+    <button onclick="exportVoices()">Export JSON</button>
+    <input type="file" id="restoreFile" onchange="restoreVoices(this)">
+  </div>
+
+  <div id="voiceContainer"></div>
+
+  <h2>📈 Chart</h2>
+  <div id="chart" style="height:400px; background:#222; margin-bottom:20px;">
+    <!-- TradingView Widget oder Chart-Integration hier -->
+  </div>
+
+  <h2>📊 Stimmen-Tabelle</h2>
+  <table id="voicesTable">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">Username</th>
+        <th onclick="sortTable(1)">Entry</th>
+        <th onclick="sortTable(2)">Leverage</th>
+        <th onclick="sortTable(3)">Size</th>
+        <th onclick="sortTable(4)">Liq</th>
+        <th onclick="sortTable(5)">PnL</th>
+        <th onclick="sortTable(6)">ROI</th>
+        <th onclick="sortTable(7)">Time</th>
+        <th>🔥</th>
+        <th>Aktion</th>
+      </tr>
+    </thead>
+    <tbody id="voicesBody"></tbody>
+  </table>
+
+  <script>
+    let voices = [];
+
+    // Wiederherstellung beim Laden
+    window.onload = function() {
+      const stored = localStorage.getItem("voices");
+      if (stored) {
+        voices = JSON.parse(stored);
+        voices.forEach(v => {
+          renderVoice(v);
+          renderTableRow(v);
+        });
+      }
+    };
+
+    function saveVoice() {
+      const data = {
+        username: document.getElementById("username").value,
+        entry: document.getElementById("entry").value,
+        leverage: document.getElementById("leverage").value,
+        size: document.getElementById("size").value,
+        liq: document.getElementById("liq").value,
+        pnl: document.getElementById("pnl").value,
+        roi: document.getElementById("roi").value,
+        time: new Date().toLocaleTimeString()
+      };
+      voices.push(data);
+      updateLocalStorage();
+      renderVoice(data);
+      renderTableRow(data);
+    }
+
+    function renderVoice(data) {
+      const box = document.createElement("div");
+      box.className = "voice-box";
+      box.innerHTML = `
+        <strong>${data.username}</strong><br>
+        Entry: ${data.entry} | Leverage: ${data.leverage}x | Size: ${data.size}<br>
+        Liq: ${data.liq} | PnL: ${data.pnl} | ROI: ${data.roi}%<br>
+        <small>${data.time}</small>
+      `;
+      document.getElementById("voiceContainer").appendChild(box);
+    }
+
+    function renderTableRow(data) {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${data.username}</td>
+        <td>${data.entry}</td>
+        <td>${data.leverage}x</td>
+        <td>${data.size}</td>
+        <td>${data.liq}</td>
+        <td>${data.pnl}</td>
+        <td>${data.roi}%</td>
+        <td>${data.time}</td>
+        <td>${getFlameSVG(data.roi)}</td>
+        <td><button onclick="deleteRow(this)">❌</button></td>
+      `;
+      document.getElementById("voicesBody").appendChild(row);
+    }
+
+    function getFlameSVG(roi) {
+      const intensity = Math.min(Math.max(parseFloat(roi), 0), 100);
+      const color = intensity > 50 ? "#ff4500" : "#ffaa00";
+      return `<svg class="flame" viewBox="0 0 24 24"><path fill="${color}" d="M12 2C10 6 6 8 6 13c0 3.3 2.7 6 6 6s6-2.7 6-6c0-5-4-7-6-11z"/></svg>`;
+    }
+
+    function deleteRow(btn) {
+      const row = btn.closest("tr");
+      const index = row.rowIndex - 1;
+      voices.splice(index, 1);
+      updateLocalStorage();
+      row.remove();
+      document.getElementById("voiceContainer").children[index]?.remove();
+    }
+
+    function updateLocalStorage() {
+      localStorage.setItem("voices", JSON.stringify(voices));
+    }
+
+    function exportVoices() {
+      const blob = new Blob([JSON.stringify(voices, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "voices.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function restoreVoices(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const restored = JSON.parse(e.target.result);
+        voices = restored;
+        updateLocalStorage();
+        document.getElementById("voicesBody").innerHTML = "";
+        document.getElementById("voiceContainer").innerHTML = "";
+        voices.forEach(v => {
+          renderVoice(v);
+          renderTableRow(v);
+        });
+      };
+      reader.readAsText(file);
+    }
+
+    function sortTable(colIndex) {
+      const table = document.getElementById("voicesTable");
+      const tbody = table.tBodies[0];
+      const rows = Array.from(tbody.rows);
+      const isNumeric = colIndex >= 1 && colIndex <= 6;
+      rows.sort((a, b) => {
+        const aText = a.cells[colIndex].textContent.replace(/[^0-9.-]/g, "");
+        const bText = b.cells[colIndex].textContent.replace(/[^0-9.-]/g, "");
+        return isNumeric ? parseFloat(bText) - parseFloat(aText) : aText.localeCompare(bText);
       });
-    </script>
-  </div>
+      rows.forEach(row => tbody.appendChild(row));
+    }
+  </script>
 
-  <section class="manual-voice">
-    <h2>🜂 Stimme der Tiefe – Binance ETH</h2>
-    <form id="binance-form">
-      <input type="text" placeholder="Username" id="binance-username">
-      <input type="number" placeholder="Entry Price" id="binance-entry">
-      <input type="number" placeholder="Leverage" id="binance-leverage">
-      <input type="number" placeholder="Size" id="binance-size">
-      <input type="number" placeholder="Liquidation Price" id="binance-liq">
-      <input type="datetime-local" id="binance-time">
-      <input type="number" placeholder="PnL (USD)" id="binance-pnl">
-      <input type="number" placeholder="ROI (%)" id="binance-roi">
-      <button type="submit">Stimme speichern</button>
-    </form>
-    <div id="binance-voices"></div>
-  </section>
-
-  <section class="manual-voice">
-    <h2>🜁 Stimme der Oberfläche – Hyperliquid</h2>
-    <form id="hyperliquid-form">
-      <input type="text" placeholder="Username" id="hyperliquid-username">
-      <input type="number" placeholder="Entry Price" id="hyperliquid-entry">
-      <input type="number" placeholder="Leverage" id="hyperliquid-leverage">
-      <input type="number" placeholder="Size" id="hyperliquid-size">
-      <input type="number" placeholder="Liquidation Price" id="hyperliquid-liq">
-      <input type="datetime-local" id="hyperliquid-time">
-      <input type="number" placeholder="PnL (USD)" id="hyperliquid-pnl">
-      <input type="number" placeholder="ROI (%)" id="hyperliquid-roi">
-      <button type="submit">Stimme speichern</button>
-    </form>
-    <div id="hyperliquid-voices"></div>
-  </section>
-
-  <div style="text-align:center; margin:2em 0;">
-    <button onclick="exportVoices()">🔁 Stimmen exportieren</button>
-    <button onclick="restoreVoices()">🧭 Stimmen wiederherstellen</button>
-    <button onclick="toggleAdminVoices('binance-voices', true)">🜂 Nur Admin-Stimmen (Binance)</button>
-    <button onclick="toggleAdminVoices('hyperliquid-voices', true)">🜁 Nur Admin-Stimmen (Hyperliquid)</button>
-  </div>
-
-  <div class="foreign-voices">
-    <h2>Fremde Stimmen – Hyperliquid ETH Leaderboard</h2>
-    <div id="hyperliquid-traders"></div>
-  </div>
-
-  <div class="foreign-voices">
-    <h2>Fremde Stimmen – Binance ETH Leaderboard</h2>
-    <div id="binance-eth-leaderboard"><p>Lade Stimmen …</p></div>
-  </div>
-
-  <script src="voices.js"></script>
-  <script src="voices-restore.js"></script>
-  <script src="leaderboard-hyper.js"></script>
-  <script src="leaderboard.js"></script>
 </body>
-</html>
+  </html>
