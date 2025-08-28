@@ -48,3 +48,12 @@ window.saveVoiceHandler = function() {
 
 window.exportVoicesHandler = exportVoices;
 window.restoreVoicesHandler = restoreVoices;
+
+
+      import { deleteVoice } from './voices.js';
+import { renderTable } from './table.js';
+
+window.deleteVoiceAndRender = function(id) {
+  deleteVoice(id);
+  renderTable();
+};
