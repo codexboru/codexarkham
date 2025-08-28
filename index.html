@@ -3,61 +3,48 @@
 <head>
   <meta charset="UTF-8">
   <title>Trades Codex</title>
-
-<link rel="stylesheet" href="voices.css">
-  
+  <link rel="stylesheet" href="voices.css">
   <style>
     body {
       background-color: #0f0f0f;
       color: #f8f8f8;
       font-family: monospace;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      border: 1px solid #444;
-      padding: 12px;
-      text-align: center;
-    }
-    th {
-      background-color: #222;
-    }
-    select, input {
+    input, button {
       background-color: #222;
       color: #f8f8f8;
       border: none;
       padding: 6px;
-      font-family: monospace;
+      margin: 4px 0;
       width: 100%;
     }
     button {
       background-color: #ff4d4d;
-      color: #fff;
-      border: none;
-      padding: 6px 12px;
       cursor: pointer;
     }
     button:hover {
       background-color: #ff1a1a;
     }
-    .long {
-      background-color: #004d00;
-      color: #aaffaa;
+    .manual-voice {
+      margin: 2em 0;
+      padding: 1em;
+      border: 1px solid #444;
+      background: #111;
     }
-    .short {
-      background-color: #660000;
-      color: #ffaaaa;
+    .voice-entry {
+      margin-top: 1em;
+      padding: 0.5em;
+      background: #222;
+      border-left: 4px solid lime;
     }
-    .action-buttons {
-      display: flex;
-      gap: 6px;
-      justify-content: center;
+    .voice-entry[data-admin="true"] {
+      border-left: 4px solid gold;
+      background-color: #1a1a1a;
+      box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
     }
-    .tradingview-widget-container {
-      margin-bottom: 40px;
+    .flame {
+      font-size: 1.5em;
+      margin-top: 10px;
     }
     .foreign-voices {
       background-color: #1a1a1a;
@@ -66,45 +53,6 @@
       margin-top: 40px;
       border-top: 2px dashed #555;
     }
-    .trader-entry {
-      margin-bottom: 25px;
-      padding: 10px;
-      background-color: #2a2a2a;
-      border-left: 4px solid #888;
-    }
-    .trader-entry:hover {
-      background-color: #333;
-      border-left-color: #ff4444;
-    }
-    .flame {
-      margin-top: 10px;
-      font-size: 1.5em;
-    }
-    .manual-voice {
-      margin: 2em 0;
-      padding: 1em;
-      border: 1px solid #444;
-      background: #111;
-      color: #eee;
-    }
-    .voice-entry {
-      margin-top: 1em;
-      padding: 0.5em;
-      background: #222;
-      border-left: 4px solid lime;
-    }
-
-    .voice-entry[data-root="true"] {
-  border-left: 4px solid gold;
-  background-color: #1a1a1a;
-  box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
-}
-
-.voice-entry[data-root="true"] .flame {
-  color: gold;
-  font-size: 1.8em;
-  text-shadow: 0 0 6px rgba(255, 215, 0, 0.6);
-}
   </style>
 </head>
 <body>
@@ -130,23 +78,6 @@
       });
     </script>
   </div>
-
-  <table id="tradesTable">
-    <thead>
-      <tr>
-        <th>Position</th>
-        <th>Entry Price</th>
-        <th>Leverage</th>
-        <th>Liquidation Price</th>
-        <th>PnL</th>
-        <th>Wallet Size</th>
-        <th>Collateral</th>
-        <th>Wallet</th>
-        <th>Aktion</th>
-      </tr>
-    </thead>
-    <tbody id="tradesBody"></tbody>
-  </table>
 
   <section class="manual-voice">
     <h2>🜂 Stimme der Tiefe – Binance ETH</h2>
@@ -183,6 +114,8 @@
   <div style="text-align:center; margin:2em 0;">
     <button onclick="exportVoices()">🔁 Stimmen exportieren</button>
     <button onclick="restoreVoices()">🧭 Stimmen wiederherstellen</button>
+    <button onclick="toggleAdminVoices('binance-voices', true)">🜂 Nur Admin-Stimmen (Binance)</button>
+    <button onclick="toggleAdminVoices('hyperliquid-voices', true)">🜁 Nur Admin-Stimmen (Hyperliquid)</button>
   </div>
 
   <div class="foreign-voices">
@@ -195,162 +128,9 @@
     <div id="binance-eth-leaderboard"><p>Lade Stimmen …</p></div>
   </div>
 
-  <script>
-    function createVoiceEntry(data, containerId) {
-      const flame = `<div class="flame" style="color:${data.pnl < 0 ? 'red' : 'lime'}">🔥</div>`;
-      const div = document.createElement("div");
-      div.className = "voice-entry";
-      div.innerHTML = `
-        <strong>${data.username}</strong><br>
-        Entry: ${data.entry} | Leverage: ${data.leverage}x<br>
-        Size: ${data.size} | Liq: ${data.liq}<br>
-        PnL: ${data.pnl} | ROI: ${data.roi}%<br>
-        Timestamp: ${data.time}<br>
-        ${flame}
-        <button onclick="this.parentElement.remove()">❌ Stimme löschen</button>
-        <hr>
-      `;
-      document.getElementById(containerId).appendChild(div);
-    }
-
-    document.getElementById("binance-form").addEventListener("submit", function(e) {
-      e.preventDefault();
-      createVoiceEntry({
-        username: binance-username.value,
-        entry: binance-entry.value,
-        leverage: binance-leverage.value,
-        size: binance-size.value,
-        liq: binance-liq.value,
-        time: binance-time.value,
-        pnl: binance-pnl.value,
-        roi: binance-roi.value
-      }, "binance-voices");
-    });
-
-    document.getElementById("hyperliquid-form").addEventListener("submit", function(e) {
-      e.preventDefault();
-      createVoiceEntry({
-        username: hyperliquid-username.value,
-        entry: hyperliquid-entry.value,
-        leverage: hyperliquid-leverage.value,
-        size: hyperliquid-size.value,
-        liq: hyperliquid-liq.value,
-        time: hyperliquid-time.value,
-        pnl: hyperliquid-pnl.value,
-        roi: hyperliquid-roi.value
-      }, "hyperliquid-voices");
-    });
-
-    function exportVoices() {
-      const voices = [];
-      document.querySelectorAll(".voice-entry").forEach(div => {
-        const lines = div.innerText.split("\n");
-        const username = lines[0].trim();
-        const entry = parseFloat(lines[1].match(/Entry:\s([\d.]+)/)[1]);
-        const leverage = parseFloat(lines[1].match(/Leverage:\s([\d.]+)x
-
-
-   const leverage = parseFloat(lines[1].match(/Leverage:\s([\d.]+)x/)[1]);
-        const size = parseFloat(lines[2].match(/Size:\s([\d.]+)/)[1]);
-        const liq = parseFloat(lines[2].match(/Liq:\s([\d.]+)/)[1]);
-        const pnl = parseFloat(lines[3].match(/PnL:\s(-?[\d.]+)/)[1]);
-        const roi = parseFloat(lines[3].match(/ROI:\s(-?[\d.]+)%/)[1]);
-        const timestamp = new Date(lines[4].replace("Timestamp: ", "")).toISOString();
-        const source = div.parentElement.id.includes("binance") ? "Binance" : "Hyperliquid";
-
-        voices.push({ source, username, entry, leverage, size, liq, timestamp, pnl, roi });
-      });
-
-      const blob = new Blob([JSON.stringify(voices, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "voices-export.json";
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    function restoreVoices() {
-      const url = "https://raw.githubusercontent.com/dein-user/dein-repo/main/voices.json"; // ← Pfad anpassen
-      fetch(url)
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById("binance-voices").innerHTML = "";
-          document.getElementById("hyperliquid-voices").innerHTML = "";
-          data.forEach(entry => {
-            const containerId = entry.source === "Binance" ? "binance-voices" : "hyperliquid-voices";
-            createVoiceEntry({
-              username: entry.username,
-              entry: entry.entry,
-              leverage: entry.leverage,
-              size: entry.size,
-              liq: entry.liq,
-              time: new Date(entry.timestamp).toLocaleString(),
-              pnl: entry.pnl,
-              roi: entry.roi
-            }, containerId);
-          });
-        })
-        .catch(err => console.error("Fehler beim Wiederherstellen der Stimmen:", err));
-    }
-
-    fetch('https://api.hyperliquid.xyz/info?type=leaderboard')
-      .then(res => res.json())
-      .then(data => {
-        const container = document.getElementById('hyperliquid-traders');
-        let count = 0;
-
-        data.traders.forEach(trader => {
-          const ethPosition = trader.positions.find(p => p.coin === 'ETH');
-          if (ethPosition && count < 20) {
-            const div = document.createElement('div');
-            div.className = 'trader-entry';
-
-            const pnlColor = ethPosition.pnl > 0 ? '#00ff99' : '#ff66cc';
-            const liqColor = '#ff4444';
-
-            div.innerHTML = `
-              <strong>${trader.name}</strong><br>
-              Entry: ${ethPosition.entryPx}<br>
-              <span style="color:${liqColor}">Liq: ${ethPosition.liqPx}</span><br>
-              <span style="color:${pnlColor}">PnL: ${ethPosition.pnl.toFixed(2)}</span><br>
-              Size: ${ethPosition.sz}<br>
-              <div class="flame">🔥</div>
-              <hr>
-            `;
-            container.appendChild(div);
-            count++;
-          }
-        });
-      });
-
-    fetch("https://binance-leaderboard-api.vercel.app/api/leaderboard?symbol=ETHUSDT")
-      .then(res => res.json())
-      .then(data => {
-        const container = document.getElementById("binance-eth-leaderboard");
-        container.innerHTML = "";
-        data.traders.slice(0, 20).forEach((trader, index) => {
-          const pnlColor = trader.pnl >= 0 ? "#00ff99" : "#ff3366";
-          const liqColor = "#ff4444";
-          const div = document.createElement("div");
-          div.className = "trader-entry";
-          div.innerHTML = `
-            <strong>#${index + 1} ${trader.name}</strong><br>
-            Entry: ${trader.entryPrice}<br>
-            <span style="color:${liqColor}">Liq: ${trader.liquidationPrice || "—"}</span><br>
-            <span style="color:${pnlColor}">PnL: ${trader.pnl}</span><br>
-            Size: ${trader.positionSize}<br>
-            <div class="flame">🔥</div>
-            <hr>
-          `;
-          container.appendChild(div);
-        });
-      });
-  </script>
   <script src="voices.js"></script>
-<script src="voices-export.js"></script>
-<script src="voices-restore.js"></script>
-<script src="leaderboard-hyper.js"></script>
-<script src="leaderboard-binance.js"></script>
+  <script src="voices-restore.js"></script>
+  <script src="leaderboard-hyper.js"></script>
+  <script src="leaderboard.js"></script>
 </body>
-</html>                                                
+</html>
