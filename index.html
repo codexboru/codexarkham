@@ -77,6 +77,20 @@
     }
     .flame {
       margin-top: 10px;
+      font-size: 1.5em;
+    }
+    .manual-voice {
+      margin: 2em 0;
+      padding: 1em;
+      border: 1px solid #444;
+      background: #111;
+      color: #eee;
+    }
+    .voice-entry {
+      margin-top: 1em;
+      padding: 0.5em;
+      background: #222;
+      border-left: 4px solid lime;
     }
   </style>
 </head>
@@ -125,55 +139,100 @@
     </tbody>
   </table>
 
-  <!-- 🔗 Ritualisierte Einbettung der JavaScript-Seele -->
-  <script src="trades-script.js"></script>
+  <!-- 🜂 Stimme der Tiefe – Binance ETH -->
+  <section class="manual-voice">
+    <h2>🜂 Stimme der Tiefe – Binance ETH</h2>
+    <form id="binance-form">
+      <input type="text" placeholder="Username" id="binance-username">
+      <input type="number" placeholder="Entry Price" id="binance-entry">
+      <input type="number" placeholder="Leverage" id="binance-leverage">
+      <input type="number" placeholder="Size" id="binance-size">
+      <input type="number" placeholder="Liquidation Price" id="binance-liq">
+      <input type="datetime-local" id="binance-time">
+      <input type="number" placeholder="PnL (USD)" id="binance-pnl">
+      <input type="number" placeholder="ROI (%)" id="binance-roi">
+      <button type="submit">Stimme speichern</button>
+    </form>
+    <div id="binance-voices"></div>
+  </section>
 
-   <!-- Binance Stimme -->
-<section class="manual-voice">
-  <h2>🜂 Stimme der Tiefe – Binance ETH</h2>
-  <form id="binance-form">
-    <input type="text" placeholder="Username" id="binance-username">
-    <input type="number" placeholder="Entry Price" id="binance-entry">
-    <input type="number" placeholder="Leverage" id="binance-leverage">
-    <input type="number" placeholder="Size" id="binance-size">
-    <input type="number" placeholder="Liquidation Price" id="binance-liq">
-    <input type="datetime-local" id="binance-time">
-    <input type="number" placeholder="PnL (USD)" id="binance-pnl">
-    <input type="number" placeholder="ROI (%)" id="binance-roi">
-    <button type="submit">Stimme speichern</button>
-  </form>
-  <div id="binance-voices"></div>
-</section>
+  <!-- 🜁 Stimme der Oberfläche – Hyperliquid -->
+  <section class="manual-voice">
+    <h2>🜁 Stimme der Oberfläche – Hyperliquid</h2>
+    <form id="hyperliquid-form">
+      <input type="text" placeholder="Username" id="hyperliquid-username">
+      <input type="number" placeholder="Entry Price" id="hyperliquid-entry">
+      <input type="number" placeholder="Leverage" id="hyperliquid-leverage">
+      <input type="number" placeholder="Size" id="hyperliquid-size">
+      <input type="number" placeholder="Liquidation Price" id="hyperliquid-liq">
+      <input type="datetime-local" id="hyperliquid-time">
+      <input type="number" placeholder="PnL (USD)" id="hyperliquid-pnl">
+      <input type="number" placeholder="ROI (%)" id="hyperliquid-roi">
+      <button type="submit">Stimme speichern</button>
+    </form>
+    <div id="hyperliquid-voices"></div>
+  </section>
 
-<!-- Hyperliquid Stimme -->
-<section class="manual-voice">
-  <h2>🜁 Stimme der Oberfläche – Hyperliquid</h2>
-  <form id="hyperliquid-form">
-    <input type="text" placeholder="Username" id="hyperliquid-username">
-    <input type="number" placeholder="Entry Price" id="hyperliquid-entry">
-    <input type="number" placeholder="Leverage" id="hyperliquid-leverage">
-    <input type="number" placeholder="Size" id="hyperliquid-size">
-    <input type="number" placeholder="Liquidation Price" id="hyperliquid-liq">
-    <input type="datetime-local" id="hyperliquid-time">
-    <input type="number" placeholder="PnL (USD)" id="hyperliquid-pnl">
-    <input type="number" placeholder="ROI (%)" id="hyperliquid-roi">
-    <button type="submit">Stimme speichern</button>
-  </form>
-  <div id="hyperliquid-voices"></div>
-</section>
-
-
-
-
-
-
-  
   <!-- 🜃 Fremde Stimmen – Hyperliquid ETH Leaderboard -->
   <div class="foreign-voices">
     <h2>Fremde Stimmen – Hyperliquid ETH Leaderboard</h2>
     <div id="hyperliquid-traders"></div>
   </div>
-  <script src="flame-generator.js"></script>
+
+  <!-- 🜁 Fremde Stimmen – Binance ETH Leaderboard -->
+  <div class="foreign-voices">
+    <h2>Fremde Stimmen – Binance ETH Leaderboard</h2>
+    <div id="binance-eth-leaderboard">
+      <p>Lade Stimmen …</p>
+    </div>
+  </div>
+
+  <!-- 🔥 Eingebettete JavaScript-Seele -->
+  <script>
+    function createVoiceEntry(data, containerId) {
+      const flame = `<div class="flame" style="color:${data.pnl < 0 ? 'red' : 'lime'}">🔥</div>`;
+      const div = document.createElement("div");
+      div.className = "voice-entry";
+      div.innerHTML = `
+        <strong>${data.username}</strong><br>
+        Entry: ${data.entry} | Leverage: ${data.leverage}x<br>
+        Size: ${data.size} | Liq: ${data.liq}<br>
+        PnL: ${data.pnl} | ROI: ${data.roi}%<br>
+        Timestamp: ${data.time}<br>
+        ${flame}
+        <button onclick="this.parentElement.remove()">❌ Stimme löschen</button>
+        <hr>
+      `;
+      document.getElementById(containerId).appendChild(div);
+    }
+
+    document.getElementById("binance-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      createVoiceEntry({
+        username: binance-username.value,
+        entry: binance-entry.value,
+        leverage: binance-leverage.value,
+        size: binance-size.value,
+        liq: binance-liq.value,
+        time: binance-time.value,
+        pnl: binance-pnl.value,
+        roi: binance-roi.value
+      }, "binance-voices");
+    });
+
+    document.getElementById("hyperliquid-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      createVoiceEntry({
+        username: hyperliquid-username.value,
+        entry: hyperliquid-entry.value,
+        leverage: hyperliquid-leverage.value,
+        size: hyperliquid-size.value,
+        liq: hyperliquid-liq.value,
+        time: hyperliquid-time.value,
+        pnl: hyperliquid-pnl.value,
+        roi:[43dcd9a7-70db-4a1f-b0ae-981daa162054](https://github.com/elitebluestar/codecanyon/tree/25c1223077a852fe3dea036293ba6ce9b5d5f8f6/resources%2Fviews%2Fchart.blade.php?citationMarker=43dcd9a7-70db-4a1f-b0ae-981daa162054 "1")[43dcd9a7-70db-4a1f-b0ae-981daa162054](https://github.com/razerbite-dev/loyalcoin/tree/cad9780c15109f3c646a0db5127881076a0e1123/wp-content%2Fplugins%2Fpremiumcoding-crypto-coins%2Fincludes%2Fcurrencyprice.class.php?citationMarker=43dcd9a7-70db-4a1f-b0ae-981daa162054 "2")
+
+    <script src="flame-generator.js"></script>
   <script>
     fetch('https://api.hyperliquid.xyz/info?type=leaderboard')
       .then(res => res.json())
@@ -196,7 +255,7 @@
               <span style="color:${liqColor}">Liq: ${ethPosition.liqPx}</span><br>
               <span style="color:${pnlColor}">PnL: ${ethPosition.pnl.toFixed(2)}</span><br>
               Size: ${ethPosition.sz}<br>
-              <div class="flame">${generateFlameSVG(ethPosition.pnl, ethPosition.sz)}</div>
+              <div class="flame">🔥</div>
               <hr>
             `;
             container.appendChild(div);
@@ -204,16 +263,7 @@
           }
         });
       });
-  </script>
 
-  <!-- 🜁 Fremde Stimmen – Binance ETH Leaderboard -->
-  <div class="foreign-voices">
-    <h2>Fremde Stimmen – Binance ETH Leaderboard</h2>
-    <div id="binance-eth-leaderboard">
-      <p>Lade Stimmen …</p>
-    </div>
-  </div>
-  <script>
     fetch("https://binance-leaderboard-api.vercel.app/api/leaderboard?symbol=ETHUSDT")
       .then(res => res.json())
       .then(data => {
@@ -230,6 +280,7 @@
             <span style="color:${liqColor}">Liq: ${trader.liquidationPrice || "—"}</span><br>
             <span style="color:${pnlColor}">PnL: ${trader.pnl}</span><br>
             Size: ${trader.positionSize}<br>
+            <div class="flame">🔥</div>
             <hr>
           `;
           container.appendChild(div);
