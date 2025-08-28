@@ -66,7 +66,7 @@
       border-top: 2px dashed #555;
     }
     .trader-entry {
-      margin-bottom: 15px;
+      margin-bottom: 25px;
       padding: 10px;
       background-color: #2a2a2a;
       border-left: 4px solid #888;
@@ -74,6 +74,9 @@
     .trader-entry:hover {
       background-color: #333;
       border-left-color: #ff4444;
+    }
+    .flame {
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -130,6 +133,7 @@
     <h2>Fremde Stimmen – Hyperliquid ETH Leaderboard</h2>
     <div id="hyperliquid-traders"></div>
   </div>
+  <script src="flame-generator.js"></script>
   <script>
     fetch('https://api.hyperliquid.xyz/info?type=leaderboard')
       .then(res => res.json())
@@ -152,6 +156,7 @@
               <span style="color:${liqColor}">Liq: ${ethPosition.liqPx}</span><br>
               <span style="color:${pnlColor}">PnL: ${ethPosition.pnl.toFixed(2)}</span><br>
               Size: ${ethPosition.sz}<br>
+              <div class="flame">${generateFlameSVG(ethPosition.pnl, ethPosition.sz)}</div>
               <hr>
             `;
             container.appendChild(div);
