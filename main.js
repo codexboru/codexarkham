@@ -86,3 +86,39 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  const toggleButton = document.getElementById("toggleChart");
+  const chartContainer = document.getElementById("chartContainer");
+  const chartDiv = document.getElementById("tradingview_chart");
+  let chartInitialized = false;
+
+  if (toggleButton && chartContainer && chartDiv) {
+    toggleButton.addEventListener("click", function () {
+      const isHidden = chartContainer.style.display === "none" || chartContainer.style.display === "";
+
+      chartContainer.style.display = isHidden ? "block" : "none";
+      toggleButton.textContent = isHidden ? "Chart schließen" : "Chart öffnen";
+
+      if (isHidden && !chartInitialized) {
+        const script = document.createElement("script");
+        script.src = "https://s3.tradingview.com/tv.js";
+        script.onload = function () {
+          new TradingView.widget({
+            "width": "100%",
+            "height": 400,
+            "symbol": "BINANCE:ETHUSDT",
+            "interval": "15",
+            "timezone": "Etc/UTC",
+            "theme": "dark",
+            "style": "1",
+            "locale": "de",
+            "container_id": "tradingview_chart"
+          });
+        };
+        document.body.appendChild(script);
+        chartInitialized = true;
+      }
+    });
+  }
+});
