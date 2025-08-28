@@ -1,0 +1,17 @@
+.foreign-voices {
+  background-color: #1a1a1a;
+  color: #ccc;
+  padding: 20px;
+  margin-top: 40px;
+  border-top: 2px dashed #555;
+}
+.trader-entry {
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #2a2a2a;
+  border-left: 4px solid #888;
+}
+.trader-entry:hover {
+  background-color: #333;
+  border-left-color: #ff4444;
+}
