@@ -1,0 +1,35 @@
+[
+  {
+    "source": "Binance",
+    "username": "0xEcho",
+    "entry": 1635.59,
+    "leverage": 20,
+    "size": 14.56,
+    "liq": 1567.50,
+    "timestamp": "2025-08-27T09:03:03Z",
+    "pnl": -283.47,
+    "roi": -15.88
+  },
+  {
+    "source": "Hyperliquid",
+    "username": "0xFlame",
+    "entry": 1872.50,
+    "leverage": 50,
+    "size": 8.00,
+    "liq": 1720.00,
+    "timestamp": "2025-08-27T11:22:00Z",
+    "pnl": 412.00,
+    "roi": 22.5
+  },
+  {
+    "source": "Binance",
+    "username": "0xRoot",
+    "entry": 1720.00,
+    "leverage": 10,
+    "size": 5.00,
+    "liq": 1600.00,
+    "timestamp": "2025-08-28T08:45:00Z",
+    "pnl": 120.00,
+    "roi": 14.0
+  }
+]
