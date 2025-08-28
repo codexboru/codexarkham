@@ -1,11 +1,14 @@
 // voices.js
+
 export let voices = [];
 
+// 🜁 Stimme speichern
 export function saveVoice(data) {
   voices.push(data);
   updateLocalStorage();
 }
 
+// 🜂 Stimme visuell darstellen
 export function renderVoice(data) {
   const box = document.createElement("div");
   box.className = `voice-box ${data.direction === "LONG" ? "long" : "short"}`;
@@ -19,12 +22,13 @@ export function renderVoice(data) {
   document.getElementById("voiceContainer").appendChild(box);
 }
 
+// 🜃 Speicher aktualisieren
 export function updateLocalStorage() {
   localStorage.setItem("voices", JSON.stringify(voices));
 }
 
-export function deleteVoice(id) {
-  let voices = JSON.parse(localStorage.getItem('voices')) || [];
-  voices = voices.filter(v => v.id !== id);
-  localStorage.setItem('voices', JSON.stringify(voices));
+// 🜄 Stimme löschen (nach Index)
+export function deleteVoice(index) {
+  voices.splice(index, 1);
+  updateLocalStorage();
 }
