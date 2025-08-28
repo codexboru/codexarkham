@@ -165,5 +165,36 @@
         });
       });
   </script>
+
+  <!-- 🜁 Fremde Stimmen – Binance ETH Leaderboard -->
+  <div class="foreign-voices">
+    <h2>Fremde Stimmen – Binance ETH Leaderboard</h2>
+    <div id="binance-eth-leaderboard">
+      <p>Lade Stimmen …</p>
+    </div>
+  </div>
+  <script>
+    fetch("https://binance-leaderboard-api.vercel.app/api/leaderboard?symbol=ETHUSDT")
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("binance-eth-leaderboard");
+        container.innerHTML = "";
+        data.traders.slice(0, 20).forEach((trader, index) => {
+          const pnlColor = trader.pnl >= 0 ? "#00ff99" : "#ff3366";
+          const liqColor = "#ff4444";
+          const div = document.createElement("div");
+          div.className = "trader-entry";
+          div.innerHTML = `
+            <strong>#${index + 1} ${trader.name}</strong><br>
+            Entry: ${trader.entryPrice}<br>
+            <span style="color:${liqColor}">Liq: ${trader.liquidationPrice || "—"}</span><br>
+            <span style="color:${pnlColor}">PnL: ${trader.pnl}</span><br>
+            Size: ${trader.positionSize}<br>
+            <hr>
+          `;
+          container.appendChild(div);
+        });
+      });
+  </script>
 </body>
 </html>
