@@ -1,4 +1,5 @@
 // export.js
+
 import { voices, updateLocalStorage, renderVoice } from './voices.js';
 import { renderTableRow } from './table.js';
 
@@ -27,9 +28,9 @@ export function restoreVoices(input) {
       updateLocalStorage();
       document.getElementById("voiceContainer").innerHTML = "";
       document.getElementById("voicesBody").innerHTML = "";
-      voices.forEach(v => {
+      voices.forEach((v, i) => {
         renderVoice(v);
-        renderTableRow(v);
+        renderTableRow(v, i);
       });
     } catch (err) {
       alert("Fehler beim Wiederherstellen: " + err.message);
