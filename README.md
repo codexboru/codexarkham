@@ -1,6 +1,9 @@
 ![codexboru_profil](githubprofil.png)
 
 
+
+
+[JSON IMPORT FILE with global heatmap](https://github.com/codexboru/codexarkham/blob/main/archive/heatmap/codex-stimmen.json)
 index.html "Liquidated" timestamp only Handy / phone / mobile --- date works with all devices, but time only with mobile!!!
 ## Stimmenkontrolle 
 
