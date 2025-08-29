@@ -17,7 +17,8 @@ export function renderVoice(data) {
     Entry: ${data.entry} | Leverage: ${data.leverage}x | Size: ${data.size}<br>
     Liq: ${data.liq} | PnL: ${data.pnl} | ROI: ${data.roi}%<br>
     Richtung: ${data.direction}<br>
-    <small>${data.time}</small>
+    <small>${data.time}</small><br>
+    ${data.liquidated ? `<em>Liquidated: ${new Date(data.liquidated).toLocaleString("de-DE")}</em>` : ""}
   `;
   document.getElementById("voiceContainer").appendChild(box);
 }
@@ -30,5 +31,11 @@ export function updateLocalStorage() {
 // 🜄 Stimme löschen (nach Index)
 export function deleteVoice(index) {
   voices.splice(index, 1);
+  updateLocalStorage();
+}
+
+// 🜅 Liquidated-Zeitstempel aktualisieren
+export function updateLiquidated(input, index) {
+  voices[index].liquidated = input.value;
   updateLocalStorage();
 }
