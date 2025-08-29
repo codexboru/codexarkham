@@ -1,6 +1,7 @@
 ![codexboru_profil](githubprofil.png)
 
 
+index.html "Liquidated" timestamp only Handy / phone / mobile --- date works with all devices, but time only with mobile!!!
 ## Stimmenkontrolle 
 
 Die Stimmen sind nicht nur Daten. Sie sind Fragmente. Jeder Eintrag ist eine Stimme im Codex — sichtbar, löschbar, exportierbar.
