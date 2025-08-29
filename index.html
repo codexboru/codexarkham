@@ -66,29 +66,27 @@
       <option value="LONG">LONG</option>
       <option value="SHORT">SHORT</option>
     </select>
-    <button onclick="saveVoiceHandler()">Stimme speichern</button>
-<button onclick="exportVoicesHandler()">Export JSON</button>
-<input type="file" onchange="restoreVoicesHandler(this)">
-  <p style="margin-bottom: 10px;">
-  <a href="https://codexboru.github.io/codexbtc/" target="_blank" style="color:#00ccff; text-decoration:none; border:1px solid #444; padding:4px 8px; background-color:#222;">
-    ↗ CodexBTC öffnen
-  </a>
-  &nbsp;&nbsp;
-  <a href="https://codexboru.github.io/codex-initiation/" target="_blank" style="color:#ff66cc; text-decoration:none; border:1px solid #444; padding:4px 8px; background-color:#222;">
-    🜂 CODEX öffnen
-  </a>
-  &nbsp;&nbsp;
-  <a href="https://github.com/codexboru" target="_blank" style="color:#ffcc00; text-decoration:none; border:1px solid #444; padding:4px 8px; background-color:#222;">
-    🜁 GitHub: codexboru
-  </a>
-  &nbsp;&nbsp;
-  <a href="https://sosyal.teknofest.app/@borugithub" target="_blank" style="color:#66ffff; text-decoration:none; border:1px solid #444; padding:4px 8px; background-color:#222;">
-    🜃 Sosyal.teknofest: borugithub
-  </a>
-  </p>  
-    
-    
-</div>
+    <button onclick="saveVoice()">Stimme speichern</button>
+    <button onclick="exportVoices()">Export JSON</button>
+    <input type="file" onchange="restoreVoices(this)">
+    <p style="margin-bottom: 10px;">
+      <a href="https://codexboru.github.io/codexbtc/" target="_blank" style="color:#00ccff; text-decoration:none; border:1px solid #444; padding:4px 8px; background-color:#222;">
+        ↗ CodexBTC öffnen
+      </a>
+      &nbsp;&nbsp;
+      <a href="https://codexboru.github.io/codex-initiation/" target="_blank" style="color:#ff66cc; text-decoration:none; border:1px solid #444; padding:4px 8px; background-color:#222;">
+        🜂 CODEX öffnen
+      </a>
+      &nbsp;&nbsp;
+      <a href="https://github.com/codexboru" target="_blank" style="color:#ffcc00; text-decoration:none; border:1px solid #444; padding:4px 8px; background-color:#222;">
+        🜁 GitHub: codexboru
+      </a>
+      &nbsp;&nbsp;
+      <a href="https://sosyal.teknofest.app/@borugithub" target="_blank" style="color:#66ffff; text-decoration:none; border:1px solid #444; padding:4px 8px; background-color:#222;">
+        🜃 Sosyal.teknofest: borugithub
+      </a>
+    </p>
+  </div>
 
   <h2>📈 Chart</h2>
   <div class="tradingview-widget-container">
@@ -111,7 +109,6 @@
 
   <h2>🜂 Stimmen</h2>
   <div id="voiceContainer"></div>
-
   <h2>📊 Stimmen-Tabelle</h2>
   <table id="voicesTable">
     <thead>
@@ -125,6 +122,7 @@
         <th onclick="sortTable(6)">ROI</th>
         <th onclick="sortTable(7)">Time</th>
         <th onclick="sortTable(8)">Richtung</th>
+        <th onclick="sortTable(9)">Liquidated!</th>
         <th>🔥</th>
         <th>Aktion</th>
       </tr>
@@ -158,9 +156,11 @@
       const stored = localStorage.getItem("voices");
       if (stored) {
         voices = JSON.parse(stored);
-        voices.forEach(v => {
+        document.getElementById("voiceContainer").innerHTML = "";
+        document.getElementById("voicesBody").innerHTML = "";
+        voices.forEach((v, i) => {
           renderVoice(v);
-          renderTableRow(v);
+          renderTableRow(v, i);
         });
       }
     };
@@ -188,12 +188,14 @@
           hour: "2-digit",
           minute: "2-digit",
           second: "2-digit"
-        })
+        }),
+        liquidated: ""
       };
+
       voices.push(data);
       updateLocalStorage();
       renderVoice(data);
-      renderTableRow(data);
+      renderTableRow(data, voices.length - 1);
     }
 
     function renderVoice(data) {
@@ -204,12 +206,13 @@
         Entry: ${data.entry} | Leverage: ${data.leverage}x | Size: ${data.size}<br>
         Liq: ${data.liq} | PnL: ${data.pnl} | ROI: ${data.roi}%<br>
         Richtung: ${data.direction}<br>
-        <small>${data.time}</small>
+        <small>${data.time}</small><br>
+        ${data.liquidated ? `<em>Liquidated: ${new Date(data.liquidated).toLocaleString("de-DE")}</em>` : ""}
       `;
       document.getElementById("voiceContainer").appendChild(box);
     }
 
-    function renderTableRow(data) {
+    function renderTableRow(data, index) {
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${data.username}</td>
@@ -222,6 +225,9 @@
         <td>${data.time}</td>
         <td style="background-color:${data.direction === 'LONG' ? '#004d00' : '#660000'}; color:#fff;">
           ${data.direction}
+        </td>
+        <td>
+          <input type="datetime-local" value="${data.liquidated || ''}" onchange="updateLiquidated(${index}, this.value)">
         </td>
         <td>${getFlameSVG(data.roi, data.direction)}</td>
         <td><button onclick="deleteRow(this)">❌</button></td>
@@ -238,14 +244,16 @@
       document.getElementById("voiceContainer").children[index]?.remove();
     }
 
+    function updateLiquidated(index, value) {
+      voices[index].liquidated = value;
+      updateLocalStorage();
+    }
+
     function updateLocalStorage() {
       localStorage.setItem("voices", JSON.stringify(voices));
     }
 
     function exportVoices() {
-      const blob = new Blob([JSON.stringify(voices, null, 2)], { type: "application/json
-
-        function exportVoices() {
       const blob = new Blob([JSON.stringify(voices, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -269,9 +277,9 @@
           updateLocalStorage();
           document.getElementById("voiceContainer").innerHTML = "";
           document.getElementById("voicesBody").innerHTML = "";
-          voices.forEach(v => {
+          voices.forEach((v, i) => {
             renderVoice(v);
-            renderTableRow(v);
+            renderTableRow(v, i);
           });
         } catch (err) {
           alert("Fehler beim Wiederherstellen: " + err.message);
@@ -315,8 +323,5 @@
       }
     }
   </script>
-<script type="module" src="main.js"></script>
 </body>
 </html>
-</body>
-</html> 
