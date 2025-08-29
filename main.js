@@ -1,6 +1,6 @@
 // main.js
 
-import { voices, saveVoice, renderVoice, updateLocalStorage, deleteVoice } from './voices.js';
+import { voices, saveVoice, renderVoice, updateLocalStorage, deleteVoice, updateLiquidated } from './voices.js';
 import { renderTableRow, renderTable } from './table.js';
 import { exportVoices, restoreVoices } from './export.js';
 
@@ -41,7 +41,8 @@ window.saveVoiceHandler = function() {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit"
-    })
+    }),
+    liquidated: "" // 🜃 Neuer Schwellenstein
   };
 
   saveVoice(data);
@@ -49,12 +50,15 @@ window.saveVoiceHandler = function() {
   renderTableRow(data, voices.length - 1);
 };
 
-// 🜃 Stimme löschen und Tabelle neu rendern
+// 🜄 Stimme löschen und Tabelle neu rendern
 window.deleteVoiceAndRender = function(index) {
   deleteVoice(index);   // Modul aus voices.js
   renderTable();        // Modul aus table.js
 };
 
-// 🜄 Export & Wiederherstellung
+// 🜅 Export & Wiederherstellung
 window.exportVoicesHandler = exportVoices;
 window.restoreVoicesHandler = restoreVoices;
+
+// 🜆 Liquidated-Zeitstempel aktualisieren
+window.updateLiquidated = updateLiquidated;
