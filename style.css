@@ -17,3 +17,23 @@
   border-radius: 4px;
   font-style: italic;
 }
+.voice-entry[data-liquidated="true"] {
+  border-left: 4px solid #8b0000; /* dunkles Rot als Würde */
+  background-color: #1a0a0a; /* tieferer Schatten */
+  box-shadow: 0 0 10px rgba(139, 0, 0, 0.4); /* sanftes Glühen */
+  position: relative;
+  opacity: 0.85; /* leichte Transparenz als Echo */
+}
+
+.voice-entry[data-liquidated="true"]::before {
+  content: "🜄 Liquidated";
+  position: absolute;
+  top: -1.2em;
+  left: 0;
+  font-size: 0.8em;
+  color: #8b0000;
+  background: #111;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-style: italic;
+}
