@@ -1,0 +1,147 @@
+[
+  {
+    "username": "da608",
+    "entry": "4542.95",
+    "leverage": "20",
+    "size": "14.54",
+    "liq": "",
+    "pnl": "-605.60",
+    "roi": "-18.16",
+    "direction": "SHORT",
+    "time": "28.08.2025, 14:52:32"
+  },
+  {
+    "username": "Geruntis",
+    "entry": "4564.26",
+    "leverage": "100",
+    "size": "60",
+    "liq": "",
+    "pnl": "-1475.15",
+    "roi": "-53.57",
+    "direction": "SHORT",
+    "time": "28.08.2025, 14:53:58"
+  },
+  {
+    "username": "Wenster",
+    "entry": "4606.95",
+    "leverage": "100",
+    "size": "0.049",
+    "liq": "",
+    "pnl": "0.78",
+    "roi": "34.76",
+    "direction": "LONG",
+    "time": "28.08.2025, 14:55:00"
+  },
+  {
+    "username": "Wehttam88",
+    "entry": "4330.71",
+    "leverage": "150",
+    "size": "4.939",
+    "liq": "",
+    "pnl": "1295.29",
+    "roi": "856.5",
+    "direction": "LONG",
+    "time": "28.08.2025, 14:57:14"
+  },
+  {
+    "username": "4441d",
+    "entry": "4712.97",
+    "leverage": "36",
+    "size": "1.499",
+    "liq": "",
+    "pnl": "183.43",
+    "roi": "95.96",
+    "direction": "SHORT",
+    "time": "28.08.2025, 14:59:36"
+  },
+  {
+    "username": "unbekannt chinese",
+    "entry": "4577.48",
+    "leverage": "150",
+    "size": "0.654",
+    "liq": "",
+    "pnl": "-10.47",
+    "roi": "-52.25",
+    "direction": "SHORT",
+    "time": "28.08.2025, 15:01:24"
+  },
+  {
+    "username": "top trader 1",
+    "entry": "",
+    "leverage": "",
+    "size": "",
+    "liq": "4445.3",
+    "pnl": "",
+    "roi": "",
+    "direction": "LONG",
+    "time": "28.08.2025, 15:07:30",
+    "liquidated": "2025-08-28T22:00"
+  },
+  {
+    "username": "top trader 2",
+    "entry": "",
+    "leverage": "",
+    "size": "",
+    "liq": "4401.2",
+    "pnl": "",
+    "roi": "",
+    "direction": "LONG",
+    "time": "28.08.2025, 15:07:44",
+    "liquidated": "2025-08-29T10:00"
+  },
+  {
+    "username": "top trader 3",
+    "entry": "",
+    "leverage": "",
+    "size": "",
+    "liq": "4051.1",
+    "pnl": "",
+    "roi": "",
+    "direction": "LONG",
+    "time": "28.08.2025, 15:07:57"
+  },
+  {
+    "username": "top trader 4",
+    "entry": "",
+    "leverage": "",
+    "size": "",
+    "liq": "4943.5",
+    "pnl": "",
+    "roi": "",
+    "direction": "SHORT",
+    "time": "28.08.2025, 15:08:11"
+  },
+  {
+    "username": "top trader 5",
+    "entry": "",
+    "leverage": "",
+    "size": "",
+    "liq": "5015.3",
+    "pnl": "",
+    "roi": "",
+    "direction": "SHORT",
+    "time": "28.08.2025, 15:08:19"
+  },
+  {
+    "username": "top trader 6",
+    "entry": "",
+    "leverage": "",
+    "size": "",
+    "liq": "5096.40",
+    "pnl": "",
+    "roi": "",
+    "direction": "SHORT",
+    "time": "28.08.2025, 15:08:33"
+  },
+  {
+    "username": "James WYNN",
+    "entry": "4239",
+    "leverage": "25",
+    "size": "29.3",
+    "liq": "4152",
+    "pnl": "15000",
+    "roi": "267",
+    "direction": "LONG",
+    "time": "28.08.2025, 15:55:56"
+  }
+]
