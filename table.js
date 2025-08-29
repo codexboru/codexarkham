@@ -18,6 +18,9 @@ export function renderTableRow(data, index) {
     <td style="background-color:${data.direction === 'LONG' ? '#004d00' : '#660000'}; color:#fff;">
       ${data.direction}
     </td>
+    <td>
+      <input type="datetime-local" value="${data.liquidated || ''}" onchange="updateLiquidated(this, ${index})" />
+    </td>
     <td>${getFlameSVG(data.roi, data.direction)}</td>
     <td><button onclick="deleteVoiceAndRender(${index})">❌</button></td>
   `;
